@@ -1,3 +1,6 @@
+import 'package:farmastock/pages/dados_da_farmacia.dart';
+import 'package:farmastock/pages/editar_produto.dart';
+import 'package:farmastock/pages/usuarios.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -108,6 +111,37 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headlineMedium,
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const DadosDaFarmaciaPage(),
+                  ),
+                );
+              },
+              child: const Text('Dados da Farmácia'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const EditarProdutoPage(),
+                  ),
+                );
+              },
+              child: const Text('Editar Produto'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const UsuariosPage()),
+                );
+              },
+              child: const Text('Usuários'),
             ),
           ],
         ),
