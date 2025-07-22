@@ -1,4 +1,8 @@
+import 'package:br_validators/br_validators.dart';
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:validators/validators.dart';
 
 class EditarUsuarioPage extends StatefulWidget {
   const EditarUsuarioPage({super.key});
@@ -42,14 +46,12 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
       appBar: AppBar(title: const Text('Editar "João Silva"')),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(24.0),
+          padding: const EdgeInsets.all(16.0),
           child: Form(
             key: _formKey,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const SizedBox(height: 16),
-
                 // Nome
                 TextFormField(
                   controller: nomeController,
@@ -57,12 +59,14 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
                     labelText: 'Nome',
                     border: OutlineInputBorder(),
                   ),
-                  validator:
-                      (value) =>
-                          (value == null || value.isEmpty)
-                              ? 'Informe o nome'
-                              : null,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Informe o nome';
+                    }
+                    return null;
+                  },
                 ),
+
                 const SizedBox(height: 16),
 
                 // CPF
@@ -73,16 +77,21 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
                     labelText: 'CPF',
                     border: OutlineInputBorder(),
                   ),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    CpfInputFormatter(),
+                  ],
                   validator: (value) {
                     if (value == null || value.isEmpty) return 'Informe o CPF';
-                    if (!RegExp(
-                      r'^\d{3}\.\d{3}\.\d{3}-\d{2}$',
-                    ).hasMatch(value)) {
-                      return 'CPF inválido (ex: 000.000.000-00)';
+
+                    if (!BRValidators.validateCPF(value)) {
+                      return 'CPF inválido';
                     }
+
                     return null;
                   },
                 ),
+
                 const SizedBox(height: 16),
 
                 // E-mail
@@ -97,35 +106,43 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
                     if (value == null || value.isEmpty) {
                       return 'Informe o e-mail';
                     }
-                    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+
+                    if (!isEmail(value)) {
                       return 'E-mail inválido';
                     }
+
                     return null;
                   },
                 ),
+
                 const SizedBox(height: 16),
 
                 // Nível
+                // TODO: Colocar dropdown
                 TextFormField(
                   controller: nivelController,
                   decoration: const InputDecoration(
                     labelText: 'Nível',
                     border: OutlineInputBorder(),
                   ),
-                  validator:
-                      (value) =>
-                          (value == null || value.isEmpty)
-                              ? 'Informe o nível'
-                              : null,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Informe o nível do usuário';
+                    }
+
+                    return null;
+                  },
                 ),
-                const SizedBox(height: 32),
+
+                const SizedBox(height: 16),
 
                 // Botão Salvar
                 SizedBox(
-                  height: 50,
+                  width: double.infinity,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.lightBlue[200],
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
                     ),
                     onPressed: _salvar,
                     child: const Text('Salvar'),

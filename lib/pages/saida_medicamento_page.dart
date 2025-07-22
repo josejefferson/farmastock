@@ -1,4 +1,9 @@
+import 'package:brasil_fields/brasil_fields.dart';
+import 'package:farmastock/constants/produtos.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
+import 'package:validators/validators.dart';
 
 class SaidaMedicamentoPage extends StatefulWidget {
   const SaidaMedicamentoPage({super.key});
@@ -39,86 +44,149 @@ class _SaidaMedicamentoPageState extends State<SaidaMedicamentoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Saída de "Omeprazol 20mg"')),
+      appBar: AppBar(title: const Text('Saída de "Omeprazol 20mg"')),
       body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.all(20),
-          width: double.infinity,
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
           child: Form(
             key: _formKey,
+            autovalidateMode: AutovalidateMode.onUserInteraction,
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              spacing: 16.0,
               children: [
                 DropdownButtonFormField<String>(
-                  decoration: InputDecoration(labelText: 'Produto'),
+                  decoration: InputDecoration(
+                    labelText: 'Produto',
+                    border: OutlineInputBorder(),
+                  ),
                   value: produtoSelecionado,
                   items:
-                      ['Omeprazol 20mg', 'Dipirona 500mg']
-                          .map(
-                            (produto) => DropdownMenuItem(
-                              value: produto,
-                              child: Text(produto),
-                            ),
-                          )
-                          .toList(),
-                  onChanged:
-                      (value) => setState(() => produtoSelecionado = value),
-                  validator:
-                      (value) => value == null ? 'Selecione um produto' : null,
+                      produtos.map((produto) {
+                        return DropdownMenuItem(
+                          value: produto,
+                          child: Text(produto),
+                        );
+                      }).toList(),
+                  onChanged: (value) {
+                    setState(() => produtoSelecionado = value);
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Selecione um produto';
+                    }
+                    return null;
+                  },
                 ),
+
                 TextFormField(
                   controller: fornecedorController,
-                  decoration: InputDecoration(labelText: 'Fornecedor'),
-                  validator:
-                      (value) => value!.isEmpty ? 'Informe o fornecedor' : null,
+                  decoration: InputDecoration(
+                    labelText: 'Fornecedor',
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Insira o fornecedor';
+                    }
+                    return null;
+                  },
                 ),
+
                 TextFormField(
                   controller: quantidadeController,
-                  decoration: InputDecoration(labelText: 'Quantidade'),
+                  decoration: InputDecoration(
+                    labelText: 'Quantidade',
+                    border: OutlineInputBorder(),
+                  ),
                   keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   validator: (value) {
-                    if (value!.isEmpty) return 'Informe a quantidade';
+                    if (value == null || value.isEmpty) {
+                      return 'Informe a quantidade';
+                    }
+
                     final number = int.tryParse(value);
-                    return number == null || number <= 0
-                        ? 'Quantidade inválida'
-                        : null;
+                    if (number == null || number <= 0) {
+                      return 'Quantidade inválida';
+                    }
+
+                    return null;
                   },
                 ),
+
                 TextFormField(
                   controller: precoCustoController,
-                  decoration: InputDecoration(
-                    labelText: 'Preço de custo (R\$)',
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Preço de Custo',
+                    prefix: Text('R\$ '),
                   ),
                   keyboardType: TextInputType.numberWithOptions(decimal: true),
                   validator: (value) {
-                    if (value!.isEmpty) return 'Informe o preço de custo';
-                    final number = double.tryParse(value.replaceAll(',', '.'));
-                    return number == null ? 'Preço inválido' : null;
+                    if (value == null || value.isEmpty) {
+                      return 'Por favor, insira o preço de custo';
+                    }
+                    if (!isFloat(value)) {
+                      return 'Preço de custo deve ser um número válido';
+                    }
+                    return null;
                   },
                 ),
+
                 TextFormField(
                   controller: validadeController,
-                  decoration: InputDecoration(labelText: 'Validade'),
+                  decoration: InputDecoration(
+                    labelText: 'Validade',
+                    border: OutlineInputBorder(),
+                  ),
                   keyboardType: TextInputType.datetime,
-                  validator:
-                      (value) => value!.isEmpty ? 'Informe a validade' : null,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    DataInputFormatter(),
+                  ],
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Por favor, insira a data de validade';
+                    }
+
+                    final date = DateFormat('dd/MM/yyyy').tryParse(value);
+                    if (date == null) {
+                      return 'Data inválida. Use o formato dd/MM/yyyy';
+                    }
+
+                    return null;
+                  },
                 ),
+
                 TextFormField(
                   controller: precoVendaController,
-                  decoration: InputDecoration(
-                    labelText: 'Preço de venda (R\$)',
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Preço de Venda',
+                    prefix: Text('R\$ '),
                   ),
                   keyboardType: TextInputType.numberWithOptions(decimal: true),
                   validator: (value) {
-                    if (value!.isEmpty) return 'Informe o preço de venda';
-                    final number = double.tryParse(value.replaceAll(',', '.'));
-                    return number == null ? 'Preço inválido' : null;
+                    if (value == null || value.isEmpty) {
+                      return 'Por favor, insira o preço de venda';
+                    }
+                    if (!isFloat(value)) {
+                      return 'Preço de venda deve ser um número válido';
+                    }
+                    return null;
                   },
                 ),
-                SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: _salvarFormulario,
-                  child: Text('Salvar'),
+
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      foregroundColor: Theme.of(context).colorScheme.onPrimary,
+                    ),
+                    onPressed: _salvarFormulario,
+                    child: const Text('Salvar'),
+                  ),
                 ),
               ],
             ),
