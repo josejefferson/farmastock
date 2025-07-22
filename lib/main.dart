@@ -1,9 +1,9 @@
-import 'package:farmastock/pages/dados_da_farmacia.dart';
-import 'package:farmastock/pages/editar_produto.dart';
+import 'package:farmastock/pages/dados_da_farmacia_page.dart';
+import 'package:farmastock/pages/editar_produto_page.dart';
 import 'package:farmastock/pages/editar_usuario_page.dart';
 import 'package:farmastock/pages/login_page.dart';
 import 'package:farmastock/pages/saida_medicamento_page.dart';
-import 'package:farmastock/pages/usuarios.dart';
+import 'package:farmastock/pages/usuarios_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
