@@ -1,5 +1,8 @@
 import 'package:farmastock/pages/dados_da_farmacia.dart';
 import 'package:farmastock/pages/editar_produto.dart';
+import 'package:farmastock/pages/editar_usuario_page.dart';
+import 'package:farmastock/pages/login_page.dart';
+import 'package:farmastock/pages/saida_medicamento_page.dart';
 import 'package:farmastock/pages/usuarios.dart';
 import 'package:flutter/material.dart';
 
@@ -142,6 +145,37 @@ class _MyHomePageState extends State<MyHomePage> {
                 );
               },
               child: const Text('Usuários'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const EditarUsuarioPage(),
+                  ),
+                );
+              },
+              child: const Text('Editar Usuário'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const LoginPage()),
+                );
+              },
+              child: const Text('Login'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SaidaMedicamentoPage(),
+                  ),
+                );
+              },
+              child: const Text('Saída de Medicamento'),
             ),
           ],
         ),

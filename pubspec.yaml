@@ -38,6 +38,7 @@ dependencies:
   br_validators: ^2.0.4
   validators: ^3.0.0
   brasil_fields: ^1.18.0
+  intl: ^0.20.2
 
 dev_dependencies:
   flutter_test:
