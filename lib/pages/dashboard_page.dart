@@ -1,13 +1,13 @@
 import 'package:farmastock/pages/catalogo_produto_page.dart';
-import 'package:farmastock/pages/entrada_medicamento_page.dart';
-import 'package:farmastock/pages/saida_estoque.dart';
-import 'package:flutter/material.dart';
 import 'package:farmastock/pages/editar_produto_page.dart';
 import 'package:farmastock/pages/editar_usuario_page.dart';
+import 'package:farmastock/pages/entrada_medicamento_page.dart';
 import 'package:farmastock/pages/login_page.dart';
+import 'package:farmastock/pages/saida_estoque.dart';
 import 'package:farmastock/pages/saida_medicamento_page.dart';
 import 'package:farmastock/pages/usuarios_page.dart';
 import 'package:farmastock/widgets/components/info_card.dart';
+import 'package:flutter/material.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
@@ -44,7 +44,8 @@ class DashboardPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const EditarProdutoPage()),
+                    builder: (context) => const EditarProdutoPage(),
+                  ),
                 );
               },
             ),
@@ -63,7 +64,8 @@ class DashboardPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const EditarUsuarioPage()),
+                    builder: (context) => const EditarUsuarioPage(),
+                  ),
                 );
               },
             ),
@@ -73,7 +75,8 @@ class DashboardPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const SaidaMedicamentoPage()),
+                    builder: (context) => const SaidaMedicamentoPage(),
+                  ),
                 );
               },
             ),
@@ -92,7 +95,8 @@ class DashboardPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const EntradaMdicamentoPage()),
+                    builder: (context) => const EntradaMedicamentoPage(),
+                  ),
                 );
               },
             ),
@@ -102,7 +106,8 @@ class DashboardPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const SaidaEstoquePage()),
+                    builder: (context) => const SaidaEstoquePage(),
+                  ),
                 );
               },
             ),
@@ -112,7 +117,8 @@ class DashboardPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const CatalogoProdutoPage()),
+                    builder: (context) => const CatalogoProdutoPage(),
+                  ),
                 );
               },
             ),
@@ -125,28 +131,31 @@ class DashboardPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Flexible(
-                child: Row(
-                  children: [
-                    Icon(Icons.medication,
-                        size: 36, color: Theme.of(context).primaryColor),
-                    const SizedBox(width: 8),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
-                          "FarmaStock",
-                          style: TextStyle(
-                              fontSize: 22, fontWeight: FontWeight.bold),
+              Row(
+                children: [
+                  Icon(
+                    Icons.medication,
+                    size: 36,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                  const SizedBox(width: 8),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text(
+                        "FarmaStock",
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
                         ),
-                        Text(
-                          "Bem-vindo José",
-                          style: TextStyle(fontSize: 14, color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
+                      Text(
+                        "Bem-vindo José",
+                        style: TextStyle(fontSize: 14, color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                ],
               ),
               const SizedBox(height: 16),
               const InfoCard(

@@ -8,9 +8,7 @@ class EntradaEstoquePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Entradas de Estoque'),
-      ),
+      appBar: AppBar(title: const Text('Entradas de Estoque')),
       body: SafeArea(
         child: ListView.separated(
           itemCount: produtosExemplo.length,
@@ -18,10 +16,7 @@ class EntradaEstoquePage extends StatelessWidget {
           itemBuilder: (context, index) {
             final produto = produtosExemplo[index];
             return ListTile(
-              title: Text(
-                produto['nome']! as String,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
+              title: Text(produto['nome']! as String),
               subtitle: Text(produto['descricao']! as String),
               trailing: Text(produto['dataEntrada']! as String),
             );
@@ -33,7 +28,8 @@ class EntradaEstoquePage extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => const EntradaMdicamentoPage()),
+              builder: (context) => const EntradaMedicamentoPage(),
+            ),
           );
         },
         child: const Icon(Icons.add),

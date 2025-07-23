@@ -28,23 +28,18 @@ class InfoCard extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                texto,
-                style: const TextStyle(fontSize: 16),
-              ),
+              Text(texto, style: const TextStyle(fontSize: 16)),
               const SizedBox(height: 8),
               Text(
                 valor,
-                style:
-                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ],
           ),
-          Icon(
-            icon,
-            size: 36,
-            color: cor,
-          ),
+          Icon(icon, size: 36, color: cor),
         ],
       ),
     );

@@ -6,7 +6,7 @@ final produtosExemplo = [
     'minimo': 50,
     'dataEntrada': '02/07/2025',
     'dataSaida': '10/07/2025',
-    'tipoSaida': 'venda'
+    'tipoSaida': 'venda',
   },
   {
     'nome': 'Paracetamol 750 mg',
@@ -15,7 +15,7 @@ final produtosExemplo = [
     'minimo': 30,
     'dataEntrada': '05/07/2025',
     'dataSaida': '15/07/2025',
-    'tipoSaida': 'interno'
+    'tipoSaida': 'interno',
   },
   {
     'nome': 'Ibuprofeno 600 mg',
@@ -24,7 +24,7 @@ final produtosExemplo = [
     'minimo': 80,
     'dataEntrada': '01/07/2025',
     'dataSaida': '20/07/2025',
-    'tipoSaida': 'venda'
+    'tipoSaida': 'venda',
   },
   {
     'nome': 'Omeprazol 20 mg',
@@ -33,6 +33,6 @@ final produtosExemplo = [
     'minimo': 40,
     'dataEntrada': '03/07/2025',
     'dataSaida': '18/07/2025',
-    'tipoSaida': 'interno'
+    'tipoSaida': 'interno',
   },
 ];

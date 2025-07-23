@@ -8,9 +8,7 @@ class CatalogoProdutoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Entradas de Estoque'),
-      ),
+      appBar: AppBar(title: const Text('Catálogo de Produtos')),
       body: ListView.separated(
         itemCount: produtosExemplo.length,
         separatorBuilder: (context, index) => const Divider(height: 1),
@@ -19,10 +17,7 @@ class CatalogoProdutoPage extends StatelessWidget {
           final estoque = produto['estoque'] as int;
           final minimo = produto['minimo'] as int;
           return ListTile(
-            title: Text(
-              produto['nome']! as String,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
+            title: Text(produto['nome']! as String),
             subtitle: Text.rich(
               TextSpan(
                 text: 'Estoque: ',
@@ -31,7 +26,7 @@ class CatalogoProdutoPage extends StatelessWidget {
                     text: '$estoque',
                     style: TextStyle(
                       color: Colors.black,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                   TextSpan(text: ' / Mínimo: $minimo'),
@@ -43,19 +38,25 @@ class CatalogoProdutoPage extends StatelessWidget {
               children: [
                 IconButton(
                   onPressed: () {},
+                  tooltip: 'Aumentar estoque',
                   icon: const Icon(Icons.add_circle_outline),
                 ),
                 IconButton(
                   onPressed: () {},
+                  tooltip: 'Diminuir estoque',
                   icon: const Icon(Icons.remove_circle_outline),
                 ),
                 IconButton(
+                  icon: const Icon(Icons.edit),
+                  color: Theme.of(context).colorScheme.primary,
+                  tooltip: 'Editar',
                   onPressed: () {},
-                  icon: const Icon(Icons.edit, color: Colors.blue),
                 ),
                 IconButton(
+                  icon: const Icon(Icons.delete),
+                  color: Theme.of(context).colorScheme.error,
+                  tooltip: 'Excluir',
                   onPressed: () {},
-                  icon: const Icon(Icons.delete, color: Colors.pink),
                 ),
               ],
             ),
@@ -66,9 +67,7 @@ class CatalogoProdutoPage extends StatelessWidget {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (context) => const EditarProdutoPage(),
-            ),
+            MaterialPageRoute(builder: (context) => const EditarProdutoPage()),
           );
         },
         child: const Icon(Icons.add),

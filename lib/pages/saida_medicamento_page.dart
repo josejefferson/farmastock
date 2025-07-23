@@ -60,13 +60,13 @@ class _SaidaMedicamentoPageState extends State<SaidaMedicamentoPage> {
                     border: OutlineInputBorder(),
                   ),
                   value: produtoSelecionado,
-                  items: 
-                  produtos.map((produto) {
-                    return DropdownMenuItem(
-                      value: produto,
-                      child: Text(produto),
-                    );
-                  }).toList(),
+                  items:
+                      produtos.map((produto) {
+                        return DropdownMenuItem(
+                          value: produto,
+                          child: Text(produto),
+                        );
+                      }).toList(),
                   onChanged: (value) {
                     setState(() => produtoSelecionado = value);
                   },
