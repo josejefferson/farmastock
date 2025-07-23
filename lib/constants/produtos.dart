@@ -1,1 +1,6 @@
-final produtos = ['Omeprazol 20mg', 'Dipirona 500mg'];
+final produtos = [
+  "Dipirona 500 mg",
+  "Paracetamol 750 mg",
+  "Ibuprofeno 600 mg",
+  "Omeprazol 20 mg"
+];
