@@ -1,7 +1,12 @@
+import 'package:farmastock/pages/catalogo_produto_page.dart';
 import 'package:farmastock/pages/dados_da_farmacia_page.dart';
+import 'package:farmastock/pages/dashboard_page.dart';
 import 'package:farmastock/pages/editar_produto_page.dart';
 import 'package:farmastock/pages/editar_usuario_page.dart';
+import 'package:farmastock/pages/entrada_estoque_page.dart';
+import 'package:farmastock/pages/entrada_medicamento_page.dart';
 import 'package:farmastock/pages/login_page.dart';
+import 'package:farmastock/pages/saida_estoque.dart';
 import 'package:farmastock/pages/saida_medicamento_page.dart';
 import 'package:farmastock/pages/usuarios_page.dart';
 import 'package:flutter/material.dart';
@@ -120,6 +125,17 @@ class _MyHomePageState extends State<MyHomePage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
+                    builder: (context) => const DashboardPage(),
+                  ),
+                );
+              },
+              child: const Text('Dashboard'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
                     builder: (context) => const DadosDaFarmaciaPage(),
                   ),
                 );
@@ -176,6 +192,50 @@ class _MyHomePageState extends State<MyHomePage> {
                 );
               },
               child: const Text('Saída de Medicamento'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const EntradaMdicamentoPage(),
+                  ),
+                );
+              },
+              child: const Text('Entrada de Medicamento'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const EntradaEstoquePage(),
+                  ),
+                );
+              },
+              child: const Text('Entrada de estoque'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SaidaEstoquePage(),
+                  ),
+                );
+              },
+              child: const Text('Saída do estoque'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CatalogoProdutoPage(),
+                  ),
+                );
+              },
+              child: const Text('Catálogo produto'),
             ),
           ],
         ),
