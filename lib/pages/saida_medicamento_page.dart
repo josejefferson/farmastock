@@ -60,13 +60,13 @@ class _SaidaMedicamentoPageState extends State<SaidaMedicamentoPage> {
                     border: OutlineInputBorder(),
                   ),
                   value: produtoSelecionado,
-                  items:
-                      produtos.map((produto) {
-                        return DropdownMenuItem(
-                          value: produto,
-                          child: Text(produto),
-                        );
-                      }).toList(),
+                  items: 
+                  produtos.map((produto) {
+                    return DropdownMenuItem(
+                      value: produto,
+                      child: Text(produto),
+                    );
+                  }).toList(),
                   onChanged: (value) {
                     setState(() => produtoSelecionado = value);
                   },
@@ -77,7 +77,6 @@ class _SaidaMedicamentoPageState extends State<SaidaMedicamentoPage> {
                     return null;
                   },
                 ),
-
                 TextFormField(
                   controller: fornecedorController,
                   decoration: InputDecoration(
@@ -91,7 +90,6 @@ class _SaidaMedicamentoPageState extends State<SaidaMedicamentoPage> {
                     return null;
                   },
                 ),
-
                 TextFormField(
                   controller: quantidadeController,
                   decoration: InputDecoration(
@@ -113,7 +111,6 @@ class _SaidaMedicamentoPageState extends State<SaidaMedicamentoPage> {
                     return null;
                   },
                 ),
-
                 TextFormField(
                   controller: precoCustoController,
                   decoration: const InputDecoration(
@@ -132,7 +129,6 @@ class _SaidaMedicamentoPageState extends State<SaidaMedicamentoPage> {
                     return null;
                   },
                 ),
-
                 TextFormField(
                   controller: validadeController,
                   decoration: InputDecoration(
@@ -157,7 +153,6 @@ class _SaidaMedicamentoPageState extends State<SaidaMedicamentoPage> {
                     return null;
                   },
                 ),
-
                 TextFormField(
                   controller: precoVendaController,
                   decoration: const InputDecoration(
@@ -176,7 +171,6 @@ class _SaidaMedicamentoPageState extends State<SaidaMedicamentoPage> {
                     return null;
                   },
                 ),
-
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
