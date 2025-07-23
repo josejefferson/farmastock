@@ -45,6 +45,7 @@ class _UsuariosPageState extends State<UsuariosPage> {
 
                       IconButton(
                         icon: const Icon(Icons.edit),
+                        color: Theme.of(context).colorScheme.primary,
                         tooltip: 'Editar',
                         onPressed: () {},
                       ),

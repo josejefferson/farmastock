@@ -5,14 +5,14 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:validators/validators.dart';
 
-class SaidaMedicamentoPage extends StatefulWidget {
-  const SaidaMedicamentoPage({super.key});
+class EntradaMedicamentoPage extends StatefulWidget {
+  const EntradaMedicamentoPage({super.key});
 
   @override
-  State<SaidaMedicamentoPage> createState() => _SaidaMedicamentoPageState();
+  State<EntradaMedicamentoPage> createState() => _EntradaMedicamentoPageState();
 }
 
-class _SaidaMedicamentoPageState extends State<SaidaMedicamentoPage> {
+class _EntradaMedicamentoPageState extends State<EntradaMedicamentoPage> {
   final _formKey = GlobalKey<FormState>();
 
   String? produtoSelecionado;
@@ -34,7 +34,6 @@ class _SaidaMedicamentoPageState extends State<SaidaMedicamentoPage> {
 
   void _salvarFormulario() {
     if (_formKey.currentState!.validate()) {
-      // Aqui você pode enviar os dados para um backend ou salvar localmente
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text('Formulário salvo com sucesso!')));
@@ -44,10 +43,10 @@ class _SaidaMedicamentoPageState extends State<SaidaMedicamentoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Saída de "Omeprazol 20mg"')),
+      appBar: AppBar(title: const Text('Entrada "Dipirona 500mg"')),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Form(
             key: _formKey,
             autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -78,14 +77,13 @@ class _SaidaMedicamentoPageState extends State<SaidaMedicamentoPage> {
                   },
                 ),
                 TextFormField(
-                  controller: fornecedorController,
-                  decoration: InputDecoration(
-                    labelText: 'Fornecedor',
+                  decoration: const InputDecoration(
                     border: OutlineInputBorder(),
+                    labelText: 'Nome do Fornecedor',
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Insira o fornecedor';
+                      return 'Por favor, insira o nome do fornecedor';
                     }
                     return null;
                   },

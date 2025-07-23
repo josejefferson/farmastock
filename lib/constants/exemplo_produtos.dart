@@ -1,0 +1,38 @@
+final produtosExemplo = [
+  {
+    'nome': 'Dipirona 500 mg',
+    'descricao': '500 unidades.',
+    'estoque': 200,
+    'minimo': 50,
+    'dataEntrada': '02/07/2025',
+    'dataSaida': '10/07/2025',
+    'tipoSaida': 'venda',
+  },
+  {
+    'nome': 'Paracetamol 750 mg',
+    'descricao': '500 unidades.',
+    'estoque': 120,
+    'minimo': 30,
+    'dataEntrada': '05/07/2025',
+    'dataSaida': '15/07/2025',
+    'tipoSaida': 'interno',
+  },
+  {
+    'nome': 'Ibuprofeno 600 mg',
+    'descricao': '500 unidades.',
+    'estoque': 300,
+    'minimo': 80,
+    'dataEntrada': '01/07/2025',
+    'dataSaida': '20/07/2025',
+    'tipoSaida': 'venda',
+  },
+  {
+    'nome': 'Omeprazol 20 mg',
+    'descricao': '500 unidades.',
+    'estoque': 150,
+    'minimo': 40,
+    'dataEntrada': '03/07/2025',
+    'dataSaida': '18/07/2025',
+    'tipoSaida': 'interno',
+  },
+];
