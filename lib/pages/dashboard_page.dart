@@ -17,6 +17,25 @@ class DashboardPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+        centerTitle: true,
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.medication,
+              size: 25,
+              color: Theme.of(context).primaryColor,
+            ),
+            SizedBox(width: 8),
+            Text(
+              "FarmaStock",
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
         leading: Builder(
           builder: (context) {
             return IconButton(
@@ -131,32 +150,8 @@ class DashboardPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Icon(
-                    Icons.medication,
-                    size: 36,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  const SizedBox(width: 8),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text(
-                        "FarmaStock",
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        "Bem-vindo José",
-                        style: TextStyle(fontSize: 14, color: Colors.grey),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+              Text("Bem-vindo José",
+                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
               const SizedBox(height: 16),
               const InfoCard(
                 texto: "Produtos com estoque baixo",
