@@ -26,10 +26,10 @@ class DashboardPage extends StatelessWidget {
               size: 25,
               color: Theme.of(context).primaryColor,
             ),
-            SizedBox(width: 8),
+            const SizedBox(width: 8),
             Text(
               "FarmaStock",
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.bold,
               ),
@@ -151,7 +151,8 @@ class DashboardPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text("Bem-vindo José",
-                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
+                  style: const TextStyle(
+                      fontSize: 25, fontWeight: FontWeight.bold)),
               const SizedBox(height: 16),
               const InfoCard(
                 texto: "Produtos com estoque baixo",
