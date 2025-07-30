@@ -6,7 +6,7 @@ Goose é uma ferramenta de migração de banco de dados escrita em Go. Ela permi
 Para instalar o Goose, você pode usar o comando:
 
 ```bash
-    go install github.com/pressly/goose/v3/cmd/goose@latest```
+go install github.com/pressly/goose/v3/cmd/goose@latest
 ```
 
 Ou você pode baixar o binário diretamente do repositório do Goose no GitHub. Escolha a versão apropriada para o seu sistema operacional e arquitetura.
@@ -38,18 +38,18 @@ As migrações são armazenadas na pasta `migrations` do seu projeto. Cada migra
 ## Uso
 
 ```bash
-    goose create <nome> sql # Cria um novo arquivo de migração
-    goose status # Mostra o status das migrações
-    goose up # Aplica todas as migrações pendentes
-    goose down # Desfaz as migrações aplicadas
-    goose up-to <versao> # Aplica migrações até a versão especificada
-    goose redo # Reaplica a última migração
-    goose reset # Reverte todas as migrações aplicadas
+goose create <nome> sql # Cria um novo arquivo de migração
+goose status # Mostra o status das migrações
+goose up # Aplica todas as migrações pendentes
+goose down # Desfaz as migrações aplicadas
+goose up-to <versao> # Aplica migrações até a versão especificada
+goose redo # Reaplica a última migração
+goose reset # Reverte todas as migrações aplicadas
 ```
 
 ## Seed
 As seeds são usadas para popular o banco de dados com dados iniciais. Nesse projeto, as seeds estão localizadas na pasta `migrations/seed`.
 
 ```bash
-    goose goose -dir ./migrations/seed/ up
+goose -dir ./migrations/seed/ up
 ```
