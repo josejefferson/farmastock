@@ -8,7 +8,9 @@ CREATE TABLE IF NOT EXISTS entradas_estoque (
     preco_venda_unitario REAL NOT NULL,
     data_validade TEXT, 
     data_entrada TEXT NOT NULL DEFAULT (datetime('now')),
-    FOREIGN KEY (produto_id) REFERENCES produtos(id)
+    FOREIGN KEY (produto_id) REFERENCES produtos(id),
+    criado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    atualizado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- +goose Down

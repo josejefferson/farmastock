@@ -7,7 +7,9 @@ CREATE TABLE IF NOT EXISTS produtos (
     quantidade_atual INTEGER NOT NULL DEFAULT 0,
     quantidade_minima INTEGER NOT NULL DEFAULT 0,
     preco_custo REAL NOT NULL,
-    preco_venda REAL NOT NULL
+    preco_venda REAL NOT NULL,
+    criado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    atualizado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 
