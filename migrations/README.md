@@ -41,7 +41,7 @@ As migrações são armazenadas na pasta `migrations` do seu projeto. Cada migra
     goose create <nome> sql # Cria um novo arquivo de migração
     goose status # Mostra o status das migrações
     goose up # Aplica todas as migrações pendentes
-    goose down # Reverte a última migração aplicada
+    goose down # Desfaz as migrações aplicadas
     goose up-to <versao> # Aplica migrações até a versão especificada
     goose redo # Reaplica a última migração
     goose reset # Reverte todas as migrações aplicadas
