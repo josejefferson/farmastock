@@ -1,45 +1,49 @@
-import 'package:farmastock/modelo/base_modal.dart';
+import 'package:hive/hive.dart';
 
-class SaidaEstoqueModelo extends BaseModel {
-  final String produtoId;
-  final String tipoSaida;
-  final int quantidade;
-  final double precoCustoUnitario;
-  final double? precoVendaUnitario;
-  final DateTime dataSaida;
+part 'saidas_estoque_modelo.g.dart';
 
-  SaidaEstoqueModelo({
-    String? id,
+@HiveType(typeId: 7)
+class SaidaEstoque {
+  @HiveField(0)
+  String id;
+
+  @HiveField(1)
+  String produtoId;
+
+  @HiveField(2)
+  TipoSaidaEstoque tipoSaida; 
+
+  @HiveField(3)
+  int quantidade;
+
+  @HiveField(4)
+  double precoCustoUnitario;
+
+  @HiveField(5)
+  double? precoVendaUnitario;
+
+  @HiveField(6)
+  String dataSaida;
+
+  SaidaEstoque({
+    this.id,
     required this.produtoId,
     required this.tipoSaida,
     required this.quantidade,
     required this.precoCustoUnitario,
     this.precoVendaUnitario,
-    DateTime? dataSaida,
-  })  : dataSaida = dataSaida ?? DateTime.now(),
-        super(id: id);
+    required this.dataSaida,
+  }): id = id ?? const Uuid().v4();
+}
 
-  @override
-  Map<String, dynamic> toMap() => {
-        'id': id,
-        'produto_id': produtoId,
-        'tipo_saida': tipoSaida,
-        'quantidade': quantidade,
-        'preco_custo_unitario': precoCustoUnitario,
-        'preco_venda_unitario': precoVendaUnitario,
-        'data_saida': dataSaida.toIso8601String(),
-      };
-
-  static SaidaEstoqueModelo fromMap(Map<String, dynamic> map) =>
-      SaidaEstoqueModelo(
-        id: map['id'],
-        produtoId: map['produto_id'],
-        tipoSaida: map['tipo_saida'],
-        quantidade: map['quantidade'],
-        precoCustoUnitario: (map['preco_custo_unitario'] as num).toDouble(),
-        precoVendaUnitario: map['preco_venda_unitario'] != null
-            ? (map['preco_venda_unitario'] as num).toDouble()
-            : null,
-        dataSaida: DateTime.parse(map['data_saida']),
-      );
+@HiveType(typeId: 8)
+enum TipoSaidaEstoque {
+  @HiveField(0)
+  venda,
+  
+  @HiveField(1)
+  perda,
+  
+  @HiveField(2)
+  usoInterno,
 }

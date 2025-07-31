@@ -1,48 +1,41 @@
-import 'package:farmastock/modelo/base_modal.dart';
+import 'package:hive/hive.dart';
 
-class EntradaEstoqueModelo extends BaseModel {
-  final String produtoId;
-  final String fornecedor;
-  final int quantidade;
-  final double precoCustoUnitario;
-  final double precoVendaUnitario;
-  final DateTime? dataValidade;
-  final DateTime dataEntrada;
+part 'entrada_estoque.g.dart';
 
-  EntradaEstoqueModelo({
-    String? id,
+@HiveType(typeId: 6)
+class EntradaEstoque {
+  @HiveField(0)
+  String id;
+
+  @HiveField(1)
+  String produtoId;
+
+  @HiveField(2)
+  String fornecedor;
+
+  @HiveField(3)
+  int quantidade;
+
+  @HiveField(4)
+  double precoCustoUnitario;
+
+  @HiveField(5)
+  double precoVendaUnitario;
+
+  @HiveField(6)
+  String? dataValidade;
+
+  @HiveField(7)
+  String dataEntrada; 
+
+  EntradaEstoque({
+    this.id,
     required this.produtoId,
     required this.fornecedor,
     required this.quantidade,
     required this.precoCustoUnitario,
     required this.precoVendaUnitario,
     this.dataValidade,
-    DateTime? dataEntrada,
-  })  : dataEntrada = dataEntrada ?? DateTime.now(),
-        super(id: id);
-
-  @override
-  Map<String, dynamic> toMap() => {
-        'id': id,
-        'produto_id': produtoId,
-        'fornecedor': fornecedor,
-        'quantidade': quantidade,
-        'preco_custo_unitario': precoCustoUnitario,
-        'preco_venda_unitario': precoVendaUnitario,
-        'data_validade': dataValidade?.toIso8601String(),
-        'data_entrada': dataEntrada.toIso8601String(),
-      };
-
-  static EntradaEstoqueModelo fromMap(Map<String, dynamic> map) => EntradaEstoqueModelo(
-        id: map['id'],
-        produtoId: map['produto_id'],
-        fornecedor: map['fornecedor'],
-        quantidade: map['quantidade'],
-        precoCustoUnitario: (map['preco_custo_unitario'] as num).toDouble(),
-        precoVendaUnitario: (map['preco_venda_unitario'] as num).toDouble(),
-        dataValidade: map['data_validade'] != null
-            ? DateTime.tryParse(map['data_validade'])
-            : null,
-        dataEntrada: DateTime.parse(map['data_entrada']),
-      );
+    required this.dataEntrada,
+  }): id = id ?? const Uuid().v4();
 }

@@ -1,45 +1,57 @@
-import 'package:farmastock/modelo/base_modal.dart';
+import 'package:hive/hive.dart';
 
-class ProdutoModelo extends BaseModel {
-  final String nome;
-  final String? codigoBarras;
-  final String unidadeMedida;
-  final int quantidadeAtual;
-  final int quantidadeMinima;
-  final double precoCusto;
-  final double precoVenda;
+part 'produto.g.dart';
 
-  ProdutoModelo({
-    String? id,
+@HiveType(typeId: 4)
+class Produto {
+  @HiveField(0)
+  String id;
+
+  @HiveField(1)
+  String nome;
+
+  @HiveField(2)
+  String? codigoBarras;
+
+  @HiveField(3)
+  UnidadeMedida unidadeMedida; 
+
+  @HiveField(4)
+  int quantidadeAtual;
+
+  @HiveField(5)
+  int quantidadeMinima;
+
+  @HiveField(6)
+  double precoCusto;
+
+  @HiveField(7)
+  double precoVenda;
+
+  Produto({
+    this.id,
     required this.nome,
-    this.codigoBarras,
+    required this.codigoBarras,
     required this.unidadeMedida,
-    this.quantidadeAtual = 0,
-    this.quantidadeMinima = 0,
+    required this.quantidadeAtual,
+    required this.quantidadeMinima,
     required this.precoCusto,
     required this.precoVenda,
-  }) : super(id: id);
+  }): id = id ?? const Uuid().v4();
+}
 
-  @override
-  Map<String, dynamic> toMap() => {
-        'id': id,
-        'nome': nome,
-        'codigo_barras': codigoBarras,
-        'unidade_medida': unidadeMedida,
-        'quantidade_atual': quantidadeAtual,
-        'quantidade_minima': quantidadeMinima,
-        'preco_custo': precoCusto,
-        'preco_venda': precoVenda,
-      };
-
-  static ProdutoModelo fromMap(Map<String, dynamic> map) => ProdutoModelo(
-        id: map['id'],
-        nome: map['nome'],
-        codigoBarras: map['codigo_barras'],
-        unidadeMedida: map['unidade_medida'],
-        quantidadeAtual: map['quantidade_atual'] ?? 0,
-        quantidadeMinima: map['quantidade_minima'] ?? 0,
-        precoCusto: (map['preco_custo'] as num).toDouble(),
-        precoVenda: (map['preco_venda'] as num).toDouble(),
-      );
+@HiveType(typeId: 5)
+enum UnidadeMedida {
+  @HiveField(0)
+  mg,
+  @HiveField(1)
+  g,
+  @HiveField(2)
+  kg,
+  @HiveField(3)
+  mL,
+  @HiveField(4)
+  L,
+  @HiveField(5)
+  un,
 }

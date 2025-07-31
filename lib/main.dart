@@ -1,7 +1,12 @@
 import 'package:farmastock/pages/dashboard_page.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async {
+  // WidgetsFlutterBinding.ensureInitialized();
+
+  // final directory = await getApplicationDocumentsDirectory();
+  // Hive.defaultDirectory = directory.path;
+
   runApp(const MyApp());
 }
 

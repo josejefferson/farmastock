@@ -1,41 +1,44 @@
 import 'package:farmastock/modelo/base_modal.dart';
 
-class UsuarioModelo extends BaseModel {
+
+part 'usuario_modelo.g.dart';
+
+@HiveType(typeId: 1)
+class UsuarioModelo {
+  
+  @HiveField(0)
+  final String id;
+  // = const Uuid().v4();
+  
+  @HiveField(1)
   final String nome;
+  
+  @HiveField(2)
   final String email;
+  
+  @HiveField(3)
   final String senha;
-  final String role;
+  
+  @HiveField(4)
+  final UsuarioRole role;
+
+  @HiveField(5)
+  final String cpf;
 
   UsuarioModelo({
-    String? id,
+    this.id,
     required this.nome,
     required this.email,
     required this.senha,
-    this.role = 'usuarioModelo',
-    DateTime? criadoEm,
-    DateTime? atualizadoEm,
-  }) : super(id: id);
+    this.role = UsuarioRole.user,
+    required this.cpf,
+  }): id = id ?? const Uuid().v4();
+}
 
-  @override
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'nome': nome,
-      'email': email,
-      'senha': senha,
-      'role': role,
-    };
-  }
-
-  static UsuarioModelo fromMap(Map<String, dynamic> map) {
-    return UsuarioModelo(
-      id: map['id'],
-      nome: map['nome'],
-      email: map['email'],
-      senha: map['senha'],
-      role: map['role'],
-      criadoEm: DateTime.parse(map['criado_em']),
-      atualizadoEm: DateTime.parse(map['atualizado_em']),
-    );
-  }
+@HiveType(typeId: 2)
+enum UsuarioRole {
+  @HiveField(0)
+  admin,
+  @HiveField(1) 
+  user,
 }
