@@ -1,3 +1,5 @@
+import 'package:farmastock/data/boxes.dart';
+import 'package:farmastock/pages/dashboard_page.dart';
 import 'package:flutter/material.dart';
 import 'package:validators/validators.dart';
 
@@ -16,11 +18,31 @@ class _LoginPageState extends State<LoginPage> {
   void _tentarLogin() {
     if (_formKey.currentState!.validate()) {
       final email = emailController.text;
-      // final senha = senhaController.text;
+      final senha = senhaController.text;
+
+      for (final usuario in usuariosBox.values) {
+        if (usuario.email == email) {
+          if (usuario.senha == senha) {
+            usuarioLogadoBox.put('usuarioLogado', usuario);
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => DashboardPage()),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text('Bem-vindo(a) ${usuario.nome}!')),
+            );
+          } else {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text('Senha incorreta')));
+          }
+          return;
+        }
+      }
 
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(SnackBar(content: Text('Login com $email')));
+      ).showSnackBar(SnackBar(content: Text('E-mail não encontrado')));
     }
   }
 
@@ -100,14 +122,14 @@ class _LoginPageState extends State<LoginPage> {
                       child: const Text('Entrar'),
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  SizedBox(
-                    width: double.infinity,
-                    child: TextButton(
-                      onPressed: () {},
-                      child: const Text('Esqueci minha senha'),
-                    ),
-                  ),
+                  // const SizedBox(height: 8),
+                  // SizedBox(
+                  //   width: double.infinity,
+                  //   child: TextButton(
+                  //     onPressed: () {},
+                  //     child: const Text('Esqueci minha senha'),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
