@@ -1,4 +1,5 @@
 import 'package:farmastock/data/boxes.dart';
+import 'package:farmastock/modelo/usuario_modelo.dart';
 import 'package:farmastock/pages/catalogo_produto_page.dart';
 import 'package:farmastock/pages/editar_produto_page.dart';
 import 'package:farmastock/pages/editar_usuario_page.dart';
@@ -82,26 +83,33 @@ class DashboardPage extends StatelessWidget {
                 );
               },
             ),
-            ListTile(
-              title: const Text('Usuários'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const UsuariosPage()),
-                );
-              },
-            ),
-            ListTile(
-              title: const Text('Editar Usuário'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const EditarUsuarioPage(),
-                  ),
-                );
-              },
-            ),
+
+            if (usuarioLogado != null &&
+                usuarioLogado.role == UsuarioRole.admin)
+              ListTile(
+                title: const Text('Usuários'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const UsuariosPage(),
+                    ),
+                  );
+                },
+              ),
+            if (usuarioLogado != null &&
+                usuarioLogado.role == UsuarioRole.admin)
+              ListTile(
+                title: const Text('Editar Usuário'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const EditarUsuarioPage(),
+                    ),
+                  );
+                },
+              ),
             ListTile(
               title: const Text('Saída de Medicamento'),
               onTap: () {
