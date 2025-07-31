@@ -15,17 +15,17 @@ class UsuariosPage extends StatefulWidget {
 class _UsuariosPageState extends State<UsuariosPage> {
   @override
   void initState() {
-    usuariosBox.listenable().addListener(onBoxChanged);
+    usuariosBox.listenable().addListener(_onBoxChanged);
     super.initState();
   }
 
   @override
   void dispose() {
-    usuariosBox.listenable().removeListener(onBoxChanged);
+    usuariosBox.listenable().removeListener(_onBoxChanged);
     super.dispose();
   }
 
-  void onBoxChanged() {
+  void _onBoxChanged() {
     setState(() {});
   }
 

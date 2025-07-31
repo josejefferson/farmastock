@@ -1,5 +1,6 @@
 import 'package:br_validators/br_validators.dart';
 import 'package:brasil_fields/brasil_fields.dart';
+import 'package:farmastock/constants/niveis.dart';
 import 'package:farmastock/data/boxes.dart';
 import 'package:farmastock/modelo/usuario_modelo.dart';
 import 'package:flutter/material.dart';
@@ -172,7 +173,7 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
                   ),
                   value: nivel,
                   items:
-                      [UsuarioRole.user, UsuarioRole.admin].map((role) {
+                      niveis.map((role) {
                         return DropdownMenuItem(
                           value: role,
                           child: Text(role.name),
