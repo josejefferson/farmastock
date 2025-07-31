@@ -13,6 +13,7 @@ void main() async {
   await Hive.initFlutter();
 
   Hive.registerAdapter(UsuarioModeloAdapter());
+  Hive.registerAdapter(UsuarioRoleAdapter());
   Hive.registerAdapter(DadosFarmaciaAdapter());
   Hive.registerAdapter(EntradaEstoqueAdapter());
   Hive.registerAdapter(ProdutoAdapter());
