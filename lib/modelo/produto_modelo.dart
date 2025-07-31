@@ -1,6 +1,7 @@
 import 'package:hive/hive.dart';
+import 'package:uuid/uuid.dart';
 
-part 'produto.g.dart';
+part 'produto_modelo.g.dart';
 
 @HiveType(typeId: 4)
 class Produto {
@@ -14,7 +15,7 @@ class Produto {
   String? codigoBarras;
 
   @HiveField(3)
-  UnidadeMedida unidadeMedida; 
+  UnidadeMedida unidadeMedida;
 
   @HiveField(4)
   int quantidadeAtual;
@@ -29,7 +30,7 @@ class Produto {
   double precoVenda;
 
   Produto({
-    this.id,
+    id,
     required this.nome,
     required this.codigoBarras,
     required this.unidadeMedida,
@@ -37,7 +38,7 @@ class Produto {
     required this.quantidadeMinima,
     required this.precoCusto,
     required this.precoVenda,
-  }): id = id ?? const Uuid().v4();
+  }) : id = id ?? const Uuid().v4();
 }
 
 @HiveType(typeId: 5)

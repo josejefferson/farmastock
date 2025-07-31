@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:uuid/uuid.dart';
 
 part 'saidas_estoque_modelo.g.dart';
 
@@ -26,7 +27,7 @@ class SaidaEstoque {
   String dataSaida;
 
   SaidaEstoque({
-    this.id,
+    id,
     required this.produtoId,
     required this.tipoSaida,
     required this.quantidade,

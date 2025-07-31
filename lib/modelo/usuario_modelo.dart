@@ -1,5 +1,5 @@
-import 'package:farmastock/modelo/base_modal.dart';
-
+import 'package:hive/hive.dart';
+import 'package:uuid/uuid.dart';
 
 part 'usuario_modelo.g.dart';
 
@@ -26,7 +26,7 @@ class UsuarioModelo {
   final String cpf;
 
   UsuarioModelo({
-    this.id,
+    id,
     required this.nome,
     required this.email,
     required this.senha,

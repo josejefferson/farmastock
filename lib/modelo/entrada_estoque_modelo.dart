@@ -1,6 +1,7 @@
 import 'package:hive/hive.dart';
+import 'package:uuid/uuid.dart';
 
-part 'entrada_estoque.g.dart';
+part 'entrada_estoque_modelo.g.dart';
 
 @HiveType(typeId: 6)
 class EntradaEstoque {
@@ -29,7 +30,7 @@ class EntradaEstoque {
   String dataEntrada; 
 
   EntradaEstoque({
-    this.id,
+    id,
     required this.produtoId,
     required this.fornecedor,
     required this.quantidade,
