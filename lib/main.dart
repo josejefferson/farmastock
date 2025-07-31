@@ -18,7 +18,9 @@ void main() async {
   Hive.registerAdapter(DadosFarmaciaAdapter());
   Hive.registerAdapter(EntradaEstoqueAdapter());
   Hive.registerAdapter(ProdutoAdapter());
+  Hive.registerAdapter(UnidadeMedidaAdapter());
   Hive.registerAdapter(SaidaEstoqueAdapter());
+  Hive.registerAdapter(TipoSaidaEstoqueAdapter());
 
   usuariosBox = await Hive.openBox<UsuarioModelo>('usuariosBox');
   dadosFarmaciaBox = await Hive.openBox<DadosFarmacia>('dadosFarmaciaBox');
