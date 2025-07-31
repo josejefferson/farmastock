@@ -1,3 +1,5 @@
+import 'package:farmastock/data/boxes.dart';
+import 'package:farmastock/modelo/usuario_modelo.dart';
 import 'package:farmastock/pages/catalogo_produto_page.dart';
 import 'package:farmastock/pages/editar_produto_page.dart';
 import 'package:farmastock/pages/editar_usuario_page.dart';
@@ -14,6 +16,10 @@ class DashboardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final usuarioLogado = usuarioLogadoBox.get('usuarioLogado');
+    final nomeUsuario = usuarioLogado?.nome ?? '?';
+    final letraUsuario = nomeUsuario[0].toUpperCase();
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -29,27 +35,36 @@ class DashboardPage extends StatelessWidget {
             const SizedBox(width: 8),
             const Text(
               "FarmaStock",
-              style: TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
           ],
         ),
-        leading: Builder(
-          builder: (context) {
-            return IconButton(
-              icon: const Icon(Icons.menu),
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-            );
-          },
-        ),
-        actions: const [
+        actions: [
           Padding(
             padding: EdgeInsets.only(right: 16),
-            child: Icon(Icons.account_circle, size: 32),
+            child: PopupMenuButton<String>(
+              tooltip: nomeUsuario,
+              itemBuilder:
+                  (context) => [
+                    PopupMenuItem<String>(value: 'logout', child: Text('Sair')),
+                  ],
+              onSelected: (value) {
+                if (value == 'logout') {
+                  usuarioLogadoBox.delete('usuarioLogado');
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                  );
+                }
+              },
+              child: CircleAvatar(
+                backgroundColor: Colors.blue,
+                child: Text(
+                  letraUsuario,
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
           ),
         ],
       ),
@@ -68,26 +83,33 @@ class DashboardPage extends StatelessWidget {
                 );
               },
             ),
-            ListTile(
-              title: const Text('Usuários'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const UsuariosPage()),
-                );
-              },
-            ),
-            ListTile(
-              title: const Text('Editar Usuário'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const EditarUsuarioPage(),
-                  ),
-                );
-              },
-            ),
+
+            if (usuarioLogado != null &&
+                usuarioLogado.role == UsuarioRole.admin)
+              ListTile(
+                title: const Text('Usuários'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const UsuariosPage(),
+                    ),
+                  );
+                },
+              ),
+            if (usuarioLogado != null &&
+                usuarioLogado.role == UsuarioRole.admin)
+              ListTile(
+                title: const Text('Editar Usuário'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const EditarUsuarioPage(),
+                    ),
+                  );
+                },
+              ),
             ListTile(
               title: const Text('Saída de Medicamento'),
               onTap: () {
@@ -150,8 +172,10 @@ class DashboardPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text("Bem-vindo José",
-                  style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold)),
+              Text(
+                "Bem-vindo $nomeUsuario",
+                style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+              ),
               const SizedBox(height: 16),
               const InfoCard(
                 texto: "Produtos com estoque baixo",

@@ -1,11 +1,16 @@
 import 'package:br_validators/br_validators.dart';
 import 'package:brasil_fields/brasil_fields.dart';
+import 'package:farmastock/constants/niveis.dart';
+import 'package:farmastock/data/boxes.dart';
+import 'package:farmastock/modelo/usuario_modelo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:validators/validators.dart';
 
 class EditarUsuarioPage extends StatefulWidget {
-  const EditarUsuarioPage({super.key});
+  final UsuarioModelo? usuario;
+
+  const EditarUsuarioPage({super.key, this.usuario});
 
   @override
   State<EditarUsuarioPage> createState() => _EditarUsuarioPageState();
@@ -14,28 +19,41 @@ class EditarUsuarioPage extends StatefulWidget {
 class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
   final _formKey = GlobalKey<FormState>();
 
-  final TextEditingController nomeController = TextEditingController(
-    text: 'João Silva',
+  late final TextEditingController nomeController = TextEditingController(
+    text: widget.usuario?.nome ?? '',
   );
-  final TextEditingController cpfController = TextEditingController(
-    text: '000.000.000-00',
+
+  late final TextEditingController cpfController = TextEditingController(
+    text: widget.usuario?.cpf ?? '',
   );
-  final TextEditingController emailController = TextEditingController(
-    text: 'joao@farmacia.com',
+
+  late final TextEditingController emailController = TextEditingController(
+    text: widget.usuario?.email ?? '',
   );
-  final TextEditingController nivelController = TextEditingController(
-    text: 'Admin',
+
+  // TODO: ocultar senha
+  late final TextEditingController senhaController = TextEditingController(
+    text: widget.usuario?.senha ?? '',
   );
+
+  late UsuarioRole nivel = widget.usuario?.role ?? UsuarioRole.user;
 
   void _salvar() {
     if (_formKey.currentState!.validate()) {
-      final nome = nomeController.text;
-      // final cpf = cpfController.text;
-      // final email = emailController.text;
-      // final nivel = nivelController.text;
+      final usuario = UsuarioModelo(
+        id: widget.usuario?.id,
+        nome: nomeController.text,
+        cpf: cpfController.text,
+        email: emailController.text,
+        senha: senhaController.text,
+        role: nivel,
+      );
+
+      usuariosBox.put(usuario.id, usuario);
+      Navigator.pop(context);
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Usuário "$nome" salvo com sucesso!')),
+        SnackBar(content: Text('Usuário "${usuario.nome}" salvo com sucesso!')),
       );
     }
   }
@@ -43,7 +61,13 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Editar "João Silva"')),
+      appBar: AppBar(
+        title: Text(
+          widget.usuario == null
+              ? 'Adicionar usuário'
+              : 'Editar "${widget.usuario?.nome}"',
+        ),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -117,19 +141,51 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
 
                 const SizedBox(height: 16),
 
-                // Nível
-                // TODO: Colocar dropdown
+                // Senha
                 TextFormField(
-                  controller: nivelController,
+                  controller: senhaController,
+                  keyboardType: TextInputType.visiblePassword,
                   decoration: const InputDecoration(
-                    labelText: 'Nível',
+                    labelText: 'Senha',
                     border: OutlineInputBorder(),
                   ),
+                  obscureText: true,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Informe o nível do usuário';
+                      return 'Informe a senha';
                     }
 
+                    if (value.length < 6) {
+                      return 'A senha deve ter pelo menos 6 caracteres';
+                    }
+
+                    return null;
+                  },
+                ),
+
+                const SizedBox(height: 16),
+
+                // Nível
+                DropdownButtonFormField<UsuarioRole>(
+                  decoration: InputDecoration(
+                    labelText: 'Nível de acesso',
+                    border: OutlineInputBorder(),
+                  ),
+                  value: nivel,
+                  items:
+                      niveis.map((role) {
+                        return DropdownMenuItem(
+                          value: role,
+                          child: Text(role.name),
+                        );
+                      }).toList(),
+                  onChanged: (value) {
+                    setState(() => nivel = value!);
+                  },
+                  validator: (value) {
+                    if (value == null) {
+                      return 'Selecione um nível de acesso';
+                    }
                     return null;
                   },
                 ),

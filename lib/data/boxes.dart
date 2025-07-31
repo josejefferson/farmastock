@@ -10,3 +10,5 @@ late Box<DadosFarmacia> dadosFarmaciaBox;
 late Box<EntradaEstoque> entradaEstoqueBox;
 late Box<Produto> produtoBox;
 late Box<SaidaEstoque> saidasEstoqueBox;
+
+late Box<UsuarioModelo> usuarioLogadoBox;
