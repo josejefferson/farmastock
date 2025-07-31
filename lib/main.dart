@@ -30,7 +30,7 @@ void main() async {
   saidasEstoqueBox = await Hive.openBox<SaidaEstoque>('saidasEstoqueBox');
   usuarioLogadoBox = await Hive.openBox<UsuarioModelo>('usuarioLogadoBox');
 
-  await seedInicial();
+  // await seedInicial();
   // final directory = await getApplicationDocumentsDirectory();
   // Hive.defaultDirectory = directory.path;
 

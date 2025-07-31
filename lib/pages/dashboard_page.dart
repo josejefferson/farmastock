@@ -1,4 +1,5 @@
 import 'package:farmastock/data/boxes.dart';
+import 'package:farmastock/data/seed.dart';
 import 'package:farmastock/modelo/usuario_modelo.dart';
 import 'package:farmastock/pages/catalogo_produto_page.dart';
 import 'package:farmastock/pages/editar_produto_page.dart';
@@ -162,6 +163,17 @@ class DashboardPage extends StatelessWidget {
                   ),
                 );
               },
+            ),
+            Builder(
+              builder: (context) {
+                return ListTile(
+                  title: const Text('[DEV] Seed Database'),
+                  onTap: () {
+                    Scaffold.of(context).closeDrawer();
+                    seedManual(context);
+                  },
+                );
+              }
             ),
           ],
         ),

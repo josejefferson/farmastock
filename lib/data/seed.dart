@@ -4,8 +4,29 @@ import 'package:farmastock/modelo/produto_modelo.dart';
 import 'package:farmastock/modelo/usuario_modelo.dart';
 import 'package:farmastock/modelo/entrada_estoque_modelo.dart';
 import 'package:farmastock/modelo/saidas_estoque_modelo.dart';
+import 'package:flutter/material.dart';
+
+Future<void> seedManual(BuildContext context) async {
+  try {
+    await seedInicial();
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text('Seed do banco de dados concluído')));
+  } catch (e) {
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text('Erro ao executar seed do banco de dados: $e')));
+  }
+}
 
 Future<void> seedInicial() async {
+  await usuariosBox.clear();
+  await dadosFarmaciaBox.clear();
+  await produtoBox.clear();
+  await entradaEstoqueBox.clear();
+  await saidasEstoqueBox.clear();
+
   final usuarios = [
     UsuarioModelo(
       nome: 'Jefferson Dantas',
@@ -20,7 +41,7 @@ Future<void> seedInicial() async {
       senha: 'marcos.paulo',
       role: UsuarioRole.admin,
       cpf: '111.111.111-11',
-    )
+    ),
   ];
 
   print("SEED: Usuários...");
@@ -78,7 +99,7 @@ Future<void> seedInicial() async {
       quantidadeMinima: 20,
       precoCusto: 4.20,
       precoVenda: 8.50,
-    )
+    ),
   ];
 
   print("SEED: Produtos...");
