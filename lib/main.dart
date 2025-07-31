@@ -28,8 +28,18 @@ void main() async {
   saidasEstoqueBox = await Hive.openBox<SaidaEstoque>('saidasEstoqueBox');
   usuarioLogadoBox = await Hive.openBox<UsuarioModelo>('usuarioLogadoBox');
 
-  // final directory = await getApplicationDocumentsDirectory();
-  // Hive.defaultDirectory = directory.path;
+  if (usuariosBox.isEmpty) {
+    usuarioLogadoBox.put(
+      'usuarioLogado',
+      UsuarioModelo(
+        nome: 'Usuário temporário',
+        email: 'temp@user.com',
+        senha: '123',
+        cpf: '123.456.789-00',
+        role: UsuarioRole.admin,
+      ),
+    );
+  }
 
   runApp(const MyApp());
 }
