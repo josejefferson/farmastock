@@ -1,4 +1,3 @@
-import 'package:farmastock/constants/exemplo_produtos.dart';
 import 'package:farmastock/data/boxes.dart';
 import 'package:farmastock/pages/entrada_medicamento_page.dart';
 import 'package:flutter/material.dart';

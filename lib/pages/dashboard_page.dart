@@ -4,6 +4,7 @@ import 'package:farmastock/modelo/usuario_modelo.dart';
 import 'package:farmastock/pages/catalogo_produto_page.dart';
 import 'package:farmastock/pages/editar_produto_page.dart';
 import 'package:farmastock/pages/editar_usuario_page.dart';
+import 'package:farmastock/pages/entrada_estoque_page.dart';
 import 'package:farmastock/pages/entrada_medicamento_page.dart';
 import 'package:farmastock/pages/login_page.dart';
 import 'package:farmastock/pages/saida_estoque.dart';
@@ -20,6 +21,30 @@ class DashboardPage extends StatelessWidget {
     final usuarioLogado = usuarioLogadoBox.get('usuarioLogado');
     final nomeUsuario = usuarioLogado?.nome ?? '?';
     final letraUsuario = nomeUsuario[0].toUpperCase();
+
+    // Hive
+    final produtos = produtoBox.values.toList();
+    final entradas = entradaEstoqueBox.values.toList();
+    final saidas = saidasEstoqueBox.values.toList();
+
+    final produtosComEstoqueBaixo =
+        produtos.where((p) => p.quantidadeAtual <= p.quantidadeMinima).length;
+
+    final hoje = DateTime.now();
+    final trintaDiasDepois = hoje.add(const Duration(days: 30));
+
+    final produtosComVencimentoProximo =
+        entradaEstoqueBox.values.where((entrada) {
+          if (entrada.dataValidade == null) return false;
+
+          final dataVal = DateTime.tryParse(entrada.dataValidade!);
+          if (dataVal == null) return false;
+
+          return dataVal.isAfter(hoje) && dataVal.isBefore(trintaDiasDepois);
+        }).length;
+
+    final entradasDoMes = entradas.length;
+    final saidasDoMes = saidas.length;
 
     return Scaffold(
       appBar: AppBar(
@@ -123,6 +148,17 @@ class DashboardPage extends StatelessWidget {
               },
             ),
             ListTile(
+              title: const Text('Entrada de estoque'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const EntradaEstoquePage(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
               title: const Text('Login'),
               onTap: () {
                 Navigator.push(
@@ -173,7 +209,7 @@ class DashboardPage extends StatelessWidget {
                     seedManual(context);
                   },
                 );
-              }
+              },
             ),
           ],
         ),
@@ -189,30 +225,30 @@ class DashboardPage extends StatelessWidget {
                 style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16),
-              const InfoCard(
+              InfoCard(
                 texto: "Produtos com estoque baixo",
-                valor: "12",
+                valor: "$produtosComEstoqueBaixo",
                 icon: Icons.warning_amber_rounded,
                 cor: Colors.red,
               ),
               const SizedBox(height: 16),
-              const InfoCard(
+              InfoCard(
                 texto: "Produtos com vencimento próximo",
-                valor: "8",
+                valor: "$produtosComVencimentoProximo",
                 icon: Icons.warning_amber_rounded,
                 cor: Colors.red,
               ),
               const SizedBox(height: 16),
-              const InfoCard(
+              InfoCard(
                 texto: "Entradas do mês",
-                valor: "156",
+                valor: "$entradasDoMes",
                 icon: Icons.trending_up,
                 cor: Colors.green,
               ),
               const SizedBox(height: 16),
-              const InfoCard(
+              InfoCard(
                 texto: "Saídas do mês",
-                valor: "243",
+                valor: "$saidasDoMes",
                 icon: Icons.trending_down,
                 cor: Colors.blue,
               ),
