@@ -33,6 +33,9 @@ class _CatalogoProdutoPageState extends State<CatalogoProdutoPage> {
     return Scaffold(
       appBar: AppBar(title: const Text('Catálogo de Produtos')),
       body: ListView.separated(
+        padding: EdgeInsets.only(
+          bottom: kFloatingActionButtonMargin + kMinInteractiveDimension,
+        ),
         itemCount: produtoBox.values.length,
         separatorBuilder: (context, index) => const Divider(height: 1),
         itemBuilder: (context, index) {

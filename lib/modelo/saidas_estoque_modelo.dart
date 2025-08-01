@@ -21,7 +21,7 @@ class SaidaEstoque {
   double precoCustoUnitario;
 
   @HiveField(5)
-  double? precoVendaUnitario;
+  double precoVendaUnitario;
 
   @HiveField(6)
   String dataSaida;
@@ -32,7 +32,7 @@ class SaidaEstoque {
     required this.tipoSaida,
     required this.quantidade,
     required this.precoCustoUnitario,
-    this.precoVendaUnitario,
+    required this.precoVendaUnitario,
     required this.dataSaida,
   }): id = id ?? const Uuid().v4();
 }

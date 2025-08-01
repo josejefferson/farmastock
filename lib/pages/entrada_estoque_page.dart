@@ -1,5 +1,6 @@
 import 'package:farmastock/data/boxes.dart';
 import 'package:farmastock/pages/entrada_medicamento_page.dart';
+import 'package:farmastock/widgets/components/confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:collection/collection.dart';
@@ -44,6 +45,9 @@ class _EntradaEstoquePageState extends State<EntradaEstoquePage> {
       appBar: AppBar(title: const Text('Entradas de Estoque')),
       body: SafeArea(
         child: ListView.separated(
+          padding: EdgeInsets.only(
+            bottom: kFloatingActionButtonMargin + kMinInteractiveDimension,
+          ),
           itemCount: entradaFiltrado.length,
           separatorBuilder: (context, index) => const Divider(height: 1),
           itemBuilder: (context, index) {
@@ -65,7 +69,27 @@ class _EntradaEstoquePageState extends State<EntradaEstoquePage> {
               subtitle: Text(
                 "${entrada.quantidade} - ${produto.unidadeMedida.name}",
               ),
-              trailing: Text(dataFormatada),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                spacing: 8.0,
+                children: [
+                  Text(dataFormatada),
+                  IconButton(
+                    icon: const Icon(Icons.delete),
+                    color: Theme.of(context).colorScheme.error,
+                    tooltip: 'Excluir',
+                    onPressed: () async {
+                      bool confirmado = await confirmDialog(context);
+                      if (!confirmado) return;
+                      await entradaEstoqueBox.delete(entrada.id);
+                      if (!context.mounted) return;
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Entrada de estoque excluída')),
+                      );
+                    },
+                  ),
+                ],
+              ),
             );
           },
         ),

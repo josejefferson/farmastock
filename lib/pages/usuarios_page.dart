@@ -45,6 +45,9 @@ class _UsuariosPageState extends State<UsuariosPage> {
             SizedBox(height: 8.0),
 
             ListView.builder(
+              padding: EdgeInsets.only(
+                bottom: kFloatingActionButtonMargin + kMinInteractiveDimension,
+              ),
               itemCount: usuariosBox.values.length,
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
@@ -54,7 +57,6 @@ class _UsuariosPageState extends State<UsuariosPage> {
                 return ListTile(
                   title: Text(usuario.nome),
                   subtitle: Text(usuario.email),
-                  onTap: () {},
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     spacing: 8.0,

@@ -22,7 +22,7 @@ class SaidaEstoqueAdapter extends TypeAdapter<SaidaEstoque> {
       tipoSaida: fields[2] as TipoSaidaEstoque,
       quantidade: fields[3] as int,
       precoCustoUnitario: fields[4] as double,
-      precoVendaUnitario: fields[5] as double?,
+      precoVendaUnitario: fields[5] as double,
       dataSaida: fields[6] as String,
     );
   }

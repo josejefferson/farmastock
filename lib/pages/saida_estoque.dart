@@ -1,6 +1,7 @@
 import 'package:farmastock/data/boxes.dart';
 import 'package:farmastock/modelo/saidas_estoque_modelo.dart';
 import 'package:farmastock/pages/saida_medicamento_page.dart';
+import 'package:farmastock/widgets/components/confirm_dialog.dart';
 import 'package:farmastock/widgets/components/info_card.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -39,26 +40,35 @@ class _SaidaEstoquePageState extends State<SaidaEstoquePage> {
         .where((s) => s.tipoSaida == TipoSaidaEstoque.venda)
         .fold<double>(
           0.0,
-          (soma, s) => soma + (s.quantidade * s.precoCustoUnitario),
+          (soma, s) =>
+              soma +
+              (s.quantidade * (s.precoVendaUnitario - s.precoCustoUnitario)),
         );
 
     final totalPerdas = saidas
         .where((s) => s.tipoSaida == TipoSaidaEstoque.perda)
         .fold<double>(
           0.0,
-          (soma, s) => soma + (s.quantidade * s.precoCustoUnitario),
+          (soma, s) =>
+              soma +
+              (s.quantidade * (s.precoVendaUnitario - s.precoCustoUnitario)),
         );
 
     final totalUsoInterno = saidas
         .where((s) => s.tipoSaida == TipoSaidaEstoque.usoInterno)
         .fold<double>(
           0.0,
-          (soma, s) => soma + (s.quantidade * s.precoCustoUnitario),
+          (soma, s) =>
+              soma +
+              (s.quantidade * (s.precoVendaUnitario - s.precoCustoUnitario)),
         );
 
     return Scaffold(
       appBar: AppBar(title: const Text('Saída de Estoque')),
       body: SingleChildScrollView(
+        padding: EdgeInsets.only(
+          bottom: kFloatingActionButtonMargin + kMinInteractiveDimension,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -116,7 +126,29 @@ class _SaidaEstoquePageState extends State<SaidaEstoquePage> {
                 return ListTile(
                   title: Text(produto.nome),
                   subtitle: Text(saida.tipoSaida.name),
-                  trailing: Text(dataFormatada),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    spacing: 8.0,
+                    children: [
+                      Text(dataFormatada),
+                      IconButton(
+                        icon: const Icon(Icons.delete),
+                        color: Theme.of(context).colorScheme.error,
+                        tooltip: 'Excluir',
+                        onPressed: () async {
+                          bool confirmado = await confirmDialog(context);
+                          if (!confirmado) return;
+                          await saidasEstoqueBox.delete(saida.id);
+                          if (!context.mounted) return;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Saída de estoque excluída'),
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 );
               },
             ),

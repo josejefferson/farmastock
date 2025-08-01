@@ -45,20 +45,34 @@ class _SaidaMedicamentoPageState extends State<SaidaMedicamentoPage> {
         tipoSaida: tipoSaidaSelecionado!,
         quantidade: int.parse(quantidadeController.text),
         precoCustoUnitario: double.parse(precoCustoController.text),
-        precoVendaUnitario: double.tryParse(precoVendaController.text),
-        dataSaida: validadeController.text,
+        precoVendaUnitario: double.parse(precoVendaController.text),
+        dataSaida:
+            DateFormat(
+              'dd/MM/yyyy',
+            ).parse(validadeController.text).toIso8601String(),
       );
-      print(saida);
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Formulário salvo com sucesso!')));
+
+      saidasEstoqueBox.put(saida.id, saida);
+
+      // Atualiza o estoque do produto
+      produtoSelecionado!.quantidadeAtual -= saida.quantidade;
+      if (produtoSelecionado!.quantidadeAtual < 0) {
+        produtoSelecionado!.quantidadeAtual = 0;
+      }
+      produtoBox.put(produtoSelecionado!.id, produtoSelecionado!);
+
+      Navigator.pop(context);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Saída de estoque cadastrada com sucesso!')),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Saída de medicamento')),
+      appBar: AppBar(title: const Text('Adicionar saída de estoque')),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(16.0),
