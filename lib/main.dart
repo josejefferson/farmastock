@@ -1,5 +1,5 @@
+import 'dart:io';
 import 'package:farmastock/data/boxes.dart';
-import 'package:farmastock/data/seed.dart';
 import 'package:farmastock/modelo/dados_farmacia.dart';
 import 'package:farmastock/modelo/entrada_estoque_modelo.dart';
 import 'package:farmastock/modelo/produto_modelo.dart';
@@ -9,10 +9,17 @@ import 'package:farmastock/pages/dashboard_page.dart';
 import 'package:farmastock/pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:path_provider/path_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Hive.initFlutter();
+
+  if (Platform.isWindows) {
+    final dir = await getApplicationSupportDirectory();
+    await Hive.initFlutter(dir.path);
+  } else {
+    await Hive.initFlutter();
+  }
 
   Hive.registerAdapter(UsuarioModeloAdapter());
   Hive.registerAdapter(UsuarioRoleAdapter());
@@ -29,10 +36,6 @@ void main() async {
   produtoBox = await Hive.openBox<Produto>('produtoBox');
   saidasEstoqueBox = await Hive.openBox<SaidaEstoque>('saidasEstoqueBox');
   usuarioLogadoBox = await Hive.openBox<UsuarioModelo>('usuarioLogadoBox');
-
-  // await seedInicial();
-  // final directory = await getApplicationDocumentsDirectory();
-  // Hive.defaultDirectory = directory.path;
 
   if (usuariosBox.isEmpty) {
     usuarioLogadoBox.put(
