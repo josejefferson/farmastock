@@ -1,5 +1,7 @@
 import 'package:brasil_fields/brasil_fields.dart';
-import 'package:farmastock/constants/produtos.dart';
+import 'package:farmastock/data/boxes.dart';
+import 'package:farmastock/modelo/produto_modelo.dart';
+import 'package:farmastock/modelo/saidas_estoque_modelo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -15,8 +17,12 @@ class SaidaMedicamentoPage extends StatefulWidget {
 class _SaidaMedicamentoPageState extends State<SaidaMedicamentoPage> {
   final _formKey = GlobalKey<FormState>();
 
-  String? produtoSelecionado;
-  final fornecedorController = TextEditingController();
+  Produto? produtoSelecionado;
+
+  TipoSaidaEstoque? tipoSaidaSelecionado;
+  final List<Produto> produtos = produtoBox.values.toList();
+
+  final tipoDeSaidaController = TextEditingController();
   final quantidadeController = TextEditingController();
   final precoCustoController = TextEditingController();
   final validadeController = TextEditingController();
@@ -24,7 +30,7 @@ class _SaidaMedicamentoPageState extends State<SaidaMedicamentoPage> {
 
   @override
   void dispose() {
-    fornecedorController.dispose();
+    tipoDeSaidaController.dispose();
     quantidadeController.dispose();
     precoCustoController.dispose();
     validadeController.dispose();
@@ -34,17 +40,39 @@ class _SaidaMedicamentoPageState extends State<SaidaMedicamentoPage> {
 
   void _salvarFormulario() {
     if (_formKey.currentState!.validate()) {
-      // Aqui você pode enviar os dados para um backend ou salvar localmente
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Formulário salvo com sucesso!')));
+      final saida = SaidaEstoque(
+        produtoId: produtoSelecionado!.id,
+        tipoSaida: tipoSaidaSelecionado!,
+        quantidade: int.parse(quantidadeController.text),
+        precoCustoUnitario: double.parse(precoCustoController.text),
+        precoVendaUnitario: double.parse(precoVendaController.text),
+        dataSaida:
+            DateFormat(
+              'dd/MM/yyyy',
+            ).parse(validadeController.text).toIso8601String(),
+      );
+
+      saidasEstoqueBox.put(saida.id, saida);
+
+      // Atualiza o estoque do produto
+      produtoSelecionado!.quantidadeAtual -= saida.quantidade;
+      if (produtoSelecionado!.quantidadeAtual < 0) {
+        produtoSelecionado!.quantidadeAtual = 0;
+      }
+      produtoBox.put(produtoSelecionado!.id, produtoSelecionado!);
+
+      Navigator.pop(context);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Saída de estoque cadastrada com sucesso!')),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Saída de "Omeprazol 20mg"')),
+      appBar: AppBar(title: const Text('Adicionar saída de estoque')),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(16.0),
@@ -54,8 +82,8 @@ class _SaidaMedicamentoPageState extends State<SaidaMedicamentoPage> {
             child: Column(
               spacing: 16.0,
               children: [
-                DropdownButtonFormField<String>(
-                  decoration: InputDecoration(
+                DropdownButtonFormField<Produto>(
+                  decoration: const InputDecoration(
                     labelText: 'Produto',
                     border: OutlineInputBorder(),
                   ),
@@ -64,31 +92,33 @@ class _SaidaMedicamentoPageState extends State<SaidaMedicamentoPage> {
                       produtos.map((produto) {
                         return DropdownMenuItem(
                           value: produto,
-                          child: Text(produto),
+                          child: Text(produto.nome),
                         );
                       }).toList(),
                   onChanged: (value) {
                     setState(() => produtoSelecionado = value);
                   },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Selecione um produto';
-                    }
-                    return null;
-                  },
+                  validator:
+                      (value) => value == null ? 'Selecione um produto' : null,
                 ),
-                TextFormField(
-                  controller: fornecedorController,
-                  decoration: InputDecoration(
-                    labelText: 'Fornecedor',
+                DropdownButtonFormField<TipoSaidaEstoque>(
+                  decoration: const InputDecoration(
+                    labelText: 'Tipo de Saída',
                     border: OutlineInputBorder(),
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Insira o fornecedor';
-                    }
-                    return null;
-                  },
+                  value: tipoSaidaSelecionado,
+                  items:
+                      TipoSaidaEstoque.values.map((tipo) {
+                        return DropdownMenuItem(
+                          value: tipo,
+                          child: Text(tipo.name), //
+                        );
+                      }).toList(),
+                  onChanged:
+                      (value) => setState(() => tipoSaidaSelecionado = value),
+                  validator:
+                      (value) =>
+                          value == null ? 'Selecione o tipo de saída' : null,
                 ),
                 TextFormField(
                   controller: quantidadeController,

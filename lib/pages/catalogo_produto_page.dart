@@ -4,126 +4,114 @@ import 'package:farmastock/widgets/components/confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-class CatalogoProdutoPage extends StatefulWidget {
+class CatalogoProdutoPage extends StatelessWidget {
   const CatalogoProdutoPage({super.key});
-
-  @override
-  State<CatalogoProdutoPage> createState() => _CatalogoProdutoPageState();
-}
-
-class _CatalogoProdutoPageState extends State<CatalogoProdutoPage> {
-  @override
-  void initState() {
-    produtoBox.listenable().addListener(_onBoxChanged);
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    produtoBox.listenable().removeListener(_onBoxChanged);
-    super.dispose();
-  }
-
-  void _onBoxChanged() {
-    setState(() {});
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Catálogo de Produtos')),
-      body: ListView.separated(
-        itemCount: produtoBox.values.length,
-        separatorBuilder: (context, index) => const Divider(height: 1),
-        itemBuilder: (context, index) {
-          final produto = produtoBox.values.elementAt(index);
-          final estoque = produto.quantidadeAtual;
-          final minimo = produto.quantidadeMinima;
-
-          return ListTile(
-            title: Text(produto.nome),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                RichText(
-                  text: TextSpan(
-                    text: 'Estoque: ',
-                    style: DefaultTextStyle.of(context).style,
-                    children: [
-                      TextSpan(
-                        text: '$estoque',
-                        style: TextStyle(
-                          color:
-                              produto.quantidadeAtual < produto.quantidadeMinima
-                                  ? Colors.red
-                                  : Colors.black,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Text('Mínimo: $minimo'),
-              ],
+      body: ValueListenableBuilder(
+        valueListenable: produtoBox.listenable(),
+        builder: (context, box, child) {
+          return ListView.separated(
+            padding: EdgeInsets.only(
+              bottom: kFloatingActionButtonMargin + kMinInteractiveDimension,
             ),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  tooltip: 'Diminuir estoque',
-                  icon: const Icon(Icons.remove_circle_outline),
-                  onPressed:
-                      produto.quantidadeAtual <= 0
-                          ? null
-                          : () {
-                            produto.quantidadeAtual--;
-                            produtoBox.put(produto.id, produto);
-                          },
-                ),
+            itemCount: box.values.length,
+            separatorBuilder: (context, index) => const Divider(height: 1),
+            itemBuilder: (context, index) {
+              final produto = box.values.elementAt(index);
+              final estoque = produto.quantidadeAtual;
+              final minimo = produto.quantidadeMinima;
 
-                IconButton(
-                  tooltip: 'Aumentar estoque',
-                  icon: const Icon(Icons.add_circle_outline),
-                  onPressed: () {
-                    produto.quantidadeAtual++;
-                    produtoBox.put(produto.id, produto);
-                  },
-                ),
-
-                IconButton(
-                  icon: const Icon(Icons.edit),
-                  color: Theme.of(context).colorScheme.primary,
-                  tooltip: 'Editar',
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return EditarProdutoPage(produto: produto);
-                        },
+              return ListTile(
+                title: Text(produto.nome),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    RichText(
+                      text: TextSpan(
+                        text: 'Estoque: ',
+                        style: DefaultTextStyle.of(context).style,
+                        children: [
+                          TextSpan(
+                            text: '$estoque',
+                            style: TextStyle(
+                              color:
+                                  produto.quantidadeAtual <
+                                          produto.quantidadeMinima
+                                      ? Colors.red
+                                      : Colors.black,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
                       ),
-                    );
-                  },
+                    ),
+                    Text('Mínimo: $minimo'),
+                  ],
                 ),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      tooltip: 'Diminuir estoque',
+                      icon: const Icon(Icons.remove_circle_outline),
+                      onPressed:
+                          produto.quantidadeAtual <= 0
+                              ? null
+                              : () {
+                                produto.quantidadeAtual--;
+                                box.put(produto.id, produto);
+                              },
+                    ),
 
-                IconButton(
-                  icon: const Icon(Icons.delete),
-                  color: Theme.of(context).colorScheme.error,
-                  tooltip: 'Excluir',
-                  onPressed: () async {
-                    bool confirmado = await confirmDialog(context);
-                    if (!confirmado) return;
-                    await produtoBox.delete(produto.id);
-                    if (!context.mounted) return;
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Produto "${produto.nome}" excluído'),
-                      ),
-                    );
-                  },
+                    IconButton(
+                      tooltip: 'Aumentar estoque',
+                      icon: const Icon(Icons.add_circle_outline),
+                      onPressed: () {
+                        produto.quantidadeAtual++;
+                        box.put(produto.id, produto);
+                      },
+                    ),
+
+                    IconButton(
+                      icon: const Icon(Icons.edit),
+                      color: Theme.of(context).colorScheme.primary,
+                      tooltip: 'Editar',
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return EditarProdutoPage(produto: produto);
+                            },
+                          ),
+                        );
+                      },
+                    ),
+
+                    IconButton(
+                      icon: const Icon(Icons.delete),
+                      color: Theme.of(context).colorScheme.error,
+                      tooltip: 'Excluir',
+                      onPressed: () async {
+                        bool confirmado = await confirmDialog(context);
+                        if (!confirmado) return;
+                        await box.delete(produto.id);
+                        if (!context.mounted) return;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Produto "${produto.nome}" excluído'),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              );
+            },
           );
         },
       ),

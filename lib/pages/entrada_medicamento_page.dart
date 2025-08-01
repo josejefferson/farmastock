@@ -1,5 +1,7 @@
 import 'package:brasil_fields/brasil_fields.dart';
-import 'package:farmastock/constants/produtos.dart';
+import 'package:farmastock/data/boxes.dart';
+import 'package:farmastock/modelo/entrada_estoque_modelo.dart';
+import 'package:farmastock/modelo/produto_modelo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -14,8 +16,9 @@ class EntradaMedicamentoPage extends StatefulWidget {
 
 class _EntradaMedicamentoPageState extends State<EntradaMedicamentoPage> {
   final _formKey = GlobalKey<FormState>();
+  final List<Produto> produtos = produtoBox.values.toList();
 
-  String? produtoSelecionado;
+  Produto? produtoSelecionado;
   final fornecedorController = TextEditingController();
   final quantidadeController = TextEditingController();
   final precoCustoController = TextEditingController();
@@ -34,16 +37,37 @@ class _EntradaMedicamentoPageState extends State<EntradaMedicamentoPage> {
 
   void _salvarFormulario() {
     if (_formKey.currentState!.validate()) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Formulário salvo com sucesso!')));
+      final entrada = EntradaEstoque(
+        produtoId: produtoSelecionado!.id,
+        fornecedor: fornecedorController.text,
+        quantidade: int.parse(quantidadeController.text),
+        precoCustoUnitario: double.parse(precoCustoController.text),
+        precoVendaUnitario: double.parse(precoVendaController.text),
+        dataValidade:
+            DateFormat(
+              'dd/MM/yyyy',
+            ).parse(validadeController.text).toIso8601String(),
+        dataEntrada: DateTime.now().toIso8601String(),
+      );
+
+      entradaEstoqueBox.put(entrada.id, entrada);
+
+      // Atualiza o estoque do produto
+      produtoSelecionado!.quantidadeAtual += entrada.quantidade;
+      produtoBox.put(produtoSelecionado!.id, produtoSelecionado!);
+
+      Navigator.pop(context);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Entrada de estoque cadastrada com sucesso!')),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Entrada "Dipirona 500mg"')),
+      appBar: AppBar(title: const Text('Adicionar entrada de estoque')),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -53,8 +77,8 @@ class _EntradaMedicamentoPageState extends State<EntradaMedicamentoPage> {
             child: Column(
               spacing: 16.0,
               children: [
-                DropdownButtonFormField<String>(
-                  decoration: InputDecoration(
+                DropdownButtonFormField<Produto>(
+                  decoration: const InputDecoration(
                     labelText: 'Produto',
                     border: OutlineInputBorder(),
                   ),
@@ -63,18 +87,14 @@ class _EntradaMedicamentoPageState extends State<EntradaMedicamentoPage> {
                       produtos.map((produto) {
                         return DropdownMenuItem(
                           value: produto,
-                          child: Text(produto),
+                          child: Text(produto.nome),
                         );
                       }).toList(),
                   onChanged: (value) {
                     setState(() => produtoSelecionado = value);
                   },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Selecione um produto';
-                    }
-                    return null;
-                  },
+                  validator:
+                      (value) => value == null ? 'Selecione um produto' : null,
                 ),
                 TextFormField(
                   decoration: const InputDecoration(
