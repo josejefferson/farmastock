@@ -2,6 +2,7 @@ import 'package:farmastock/data/boxes.dart';
 import 'package:farmastock/data/seed.dart';
 import 'package:farmastock/modelo/usuario_modelo.dart';
 import 'package:farmastock/pages/catalogo_produto_page.dart';
+import 'package:farmastock/pages/dados_da_farmacia_page.dart';
 import 'package:farmastock/pages/editar_produto_page.dart';
 import 'package:farmastock/pages/editar_usuario_page.dart';
 import 'package:farmastock/pages/entrada_estoque_page.dart';
@@ -10,9 +11,31 @@ import 'package:farmastock/pages/saida_estoque.dart';
 import 'package:farmastock/pages/usuarios_page.dart';
 import 'package:farmastock/widgets/components/info_card.dart';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
-class DashboardPage extends StatelessWidget {
+class DashboardPage extends StatefulWidget {
   const DashboardPage({super.key});
+
+  @override
+  State<DashboardPage> createState() => _DashboardPageState();
+}
+
+class _DashboardPageState extends State<DashboardPage> {
+  @override
+  void initState() {
+    produtoBox.listenable().addListener(_onBoxChanged);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    produtoBox.listenable().removeListener(_onBoxChanged);
+    super.dispose();
+  }
+
+  void _onBoxChanged() {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -130,6 +153,19 @@ class DashboardPage extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => const EditarUsuarioPage(),
+                    ),
+                  );
+                },
+              ),
+            if (usuarioLogado != null &&
+                usuarioLogado.role == UsuarioRole.admin)
+              ListTile(
+                title: const Text('Dados da Farmácia'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const DadosDaFarmaciaPage(),
                     ),
                   );
                 },
