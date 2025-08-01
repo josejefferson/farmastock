@@ -1,14 +1,6 @@
 import 'package:farmastock/data/boxes.dart';
-import 'package:farmastock/data/seed.dart';
-import 'package:farmastock/modelo/usuario_modelo.dart';
-import 'package:farmastock/pages/catalogo_produto_page.dart';
-import 'package:farmastock/pages/dados_da_farmacia_page.dart';
-import 'package:farmastock/pages/editar_produto_page.dart';
-import 'package:farmastock/pages/editar_usuario_page.dart';
-import 'package:farmastock/pages/entrada_estoque_page.dart';
-import 'package:farmastock/pages/login_page.dart';
-import 'package:farmastock/pages/saida_estoque.dart';
-import 'package:farmastock/pages/usuarios_page.dart';
+import 'package:farmastock/widgets/components/appbar.dart';
+import 'package:farmastock/widgets/components/drawer.dart';
 import 'package:farmastock/widgets/components/info_card.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -23,13 +15,21 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   @override
   void initState() {
+    usuariosBox.listenable().addListener(_onBoxChanged);
+    dadosFarmaciaBox.listenable().addListener(_onBoxChanged);
+    entradaEstoqueBox.listenable().addListener(_onBoxChanged);
     produtoBox.listenable().addListener(_onBoxChanged);
+    saidasEstoqueBox.listenable().addListener(_onBoxChanged);
     super.initState();
   }
 
   @override
   void dispose() {
+    usuariosBox.listenable().removeListener(_onBoxChanged);
+    dadosFarmaciaBox.listenable().removeListener(_onBoxChanged);
+    entradaEstoqueBox.listenable().removeListener(_onBoxChanged);
     produtoBox.listenable().removeListener(_onBoxChanged);
+    saidasEstoqueBox.listenable().removeListener(_onBoxChanged);
     super.dispose();
   }
 
@@ -41,7 +41,6 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     final usuarioLogado = usuarioLogadoBox.get('usuarioLogado');
     final nomeUsuario = usuarioLogado?.nome ?? '?';
-    final letraUsuario = nomeUsuario[0].toUpperCase();
 
     // Hive
     final produtos = produtoBox.values.toList();
@@ -68,186 +67,8 @@ class _DashboardPageState extends State<DashboardPage> {
     final saidasDoMes = saidas.length;
 
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        centerTitle: true,
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.medication,
-              size: 25,
-              color: Theme.of(context).primaryColor,
-            ),
-            const SizedBox(width: 8),
-            const Text(
-              "FarmaStock",
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            ),
-          ],
-        ),
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 16),
-            child: PopupMenuButton<String>(
-              tooltip: nomeUsuario,
-              itemBuilder:
-                  (context) => [
-                    PopupMenuItem<String>(value: 'logout', child: Text('Sair')),
-                  ],
-              onSelected: (value) {
-                if (value == 'logout') {
-                  usuarioLogadoBox.delete('usuarioLogado');
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const LoginPage()),
-                  );
-                }
-              },
-              child: CircleAvatar(
-                backgroundColor: Colors.blue,
-                child: Text(
-                  letraUsuario,
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            ListTile(
-              title: const Text('Editar Produto'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const EditarProdutoPage(),
-                  ),
-                );
-              },
-            ),
-
-            if (usuarioLogado != null &&
-                usuarioLogado.role == UsuarioRole.admin)
-              ListTile(
-                title: const Text('Usuários'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const UsuariosPage(),
-                    ),
-                  );
-                },
-              ),
-            if (usuarioLogado != null &&
-                usuarioLogado.role == UsuarioRole.admin)
-              ListTile(
-                title: const Text('Editar Usuário'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const EditarUsuarioPage(),
-                    ),
-                  );
-                },
-              ),
-            if (usuarioLogado != null &&
-                usuarioLogado.role == UsuarioRole.admin)
-              ListTile(
-                title: const Text('Dados da Farmácia'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const DadosDaFarmaciaPage(),
-                    ),
-                  );
-                },
-              ),
-            // ListTile(
-            //   title: const Text('Saída de Medicamento'),
-            //   onTap: () {
-            //     Navigator.push(
-            //       context,
-            //       MaterialPageRoute(
-            //         builder: (context) => const SaidaMedicamentoPage(),
-            //       ),
-            //     );
-            //   },
-            // ),
-            ListTile(
-              title: const Text('Entrada de estoque'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const EntradaEstoquePage(),
-                  ),
-                );
-              },
-            ),
-            ListTile(
-              title: const Text('Login'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LoginPage()),
-                );
-              },
-            ),
-            // ListTile(
-            //   title: const Text('Entrada de medicamento'),
-            //   onTap: () {
-            //     Navigator.push(
-            //       context,
-            //       MaterialPageRoute(
-            //         builder: (context) => const EntradaMedicamentoPage(),
-            //       ),
-            //     );
-            //   },
-            // ),
-            ListTile(
-              title: const Text('Saida estoque'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const SaidaEstoquePage(),
-                  ),
-                );
-              },
-            ),
-            ListTile(
-              title: const Text('Catálogo produto'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CatalogoProdutoPage(),
-                  ),
-                );
-              },
-            ),
-            Builder(
-              builder: (context) {
-                return ListTile(
-                  title: const Text('[DEV] Seed Database'),
-                  onTap: () {
-                    Scaffold.of(context).closeDrawer();
-                    seedManual(context);
-                  },
-                );
-              },
-            ),
-          ],
-        ),
-      ),
+      appBar: MyAppBar(),
+      drawer: MyDrawer(),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
