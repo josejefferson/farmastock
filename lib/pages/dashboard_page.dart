@@ -136,17 +136,17 @@ class DashboardPage extends StatelessWidget {
                   );
                 },
               ),
-            ListTile(
-              title: const Text('Saída de Medicamento'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const SaidaMedicamentoPage(),
-                  ),
-                );
-              },
-            ),
+            // ListTile(
+            //   title: const Text('Saída de Medicamento'),
+            //   onTap: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //         builder: (context) => const SaidaMedicamentoPage(),
+            //       ),
+            //     );
+            //   },
+            // ),
             ListTile(
               title: const Text('Entrada de estoque'),
               onTap: () {
@@ -167,17 +167,17 @@ class DashboardPage extends StatelessWidget {
                 );
               },
             ),
-            ListTile(
-              title: const Text('Entrada de medicamento'),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const EntradaMedicamentoPage(),
-                  ),
-                );
-              },
-            ),
+            // ListTile(
+            //   title: const Text('Entrada de medicamento'),
+            //   onTap: () {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //         builder: (context) => const EntradaMedicamentoPage(),
+            //       ),
+            //     );
+            //   },
+            // ),
             ListTile(
               title: const Text('Saida estoque'),
               onTap: () {
