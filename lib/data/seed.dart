@@ -14,9 +14,9 @@ Future<void> seedManual(BuildContext context) async {
       context,
     ).showSnackBar(SnackBar(content: Text('Seed do banco de dados concluído')));
   } catch (e) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text('Erro ao executar seed do banco de dados: $e')));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Erro ao executar seed do banco de dados: $e')),
+    );
   }
 }
 
@@ -30,8 +30,15 @@ Future<void> seedInicial() async {
   final usuarios = [
     UsuarioModelo(
       nome: 'Jefferson Dantas',
-      email: 'jefferson.dantas@example.com',
+      email: 'jefferson.dantas@gmail.com',
       senha: 'jefferson.dantas',
+      role: UsuarioRole.user,
+      cpf: '222.222.222-22',
+    ),
+    UsuarioModelo(
+      nome: 'Kayo Ronald',
+      email: 'kayo.ronald@gmail.com',
+      senha: 'kayo.ronald',
       role: UsuarioRole.user,
       cpf: '222.222.222-22',
     ),
@@ -53,7 +60,7 @@ Future<void> seedInicial() async {
 
   final farmacia = DadosFarmacia(
     nomeFarmacia: "Farmácia Popular",
-    cnpj: "00.000.000/0001-00",
+    cnpj: "06.990.590/0001-23",
     email: "farmacia.popular@gmail.com",
     telefone: "(83) 99999-9999",
   );
