@@ -31,21 +31,22 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
     text: widget.usuario?.email ?? '',
   );
 
-  // TODO: ocultar senha
   late final TextEditingController senhaController = TextEditingController(
-    text: widget.usuario?.senha ?? '',
+    text: '',
   );
 
   late UsuarioRole nivel = widget.usuario?.role ?? UsuarioRole.user;
 
   void _salvar() {
     if (_formKey.currentState!.validate()) {
+      bool senhaDefinida = senhaController.text.isNotEmpty;
+
       final usuario = UsuarioModelo(
         id: widget.usuario?.id,
         nome: nomeController.text,
         cpf: cpfController.text,
         email: emailController.text,
-        senha: senhaController.text,
+        senha: senhaDefinida ? senhaController.text : widget.usuario!.senha,
         role: nivel,
       );
 
@@ -145,17 +146,22 @@ class _EditarUsuarioPageState extends State<EditarUsuarioPage> {
                 TextFormField(
                   controller: senhaController,
                   keyboardType: TextInputType.visiblePassword,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     labelText: 'Senha',
                     border: OutlineInputBorder(),
+                    hintText:
+                        widget.usuario != null
+                            ? 'Deixe em branco para manter a senha atual'
+                            : null,
                   ),
                   obscureText: true,
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
+                    if (value == null ||
+                        widget.usuario == null && (value.isEmpty)) {
                       return 'Informe a senha';
                     }
 
-                    if (value.length < 6) {
+                    if (value.isNotEmpty && value.length < 6) {
                       return 'A senha deve ter pelo menos 6 caracteres';
                     }
 
