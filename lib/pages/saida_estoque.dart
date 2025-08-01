@@ -67,21 +67,27 @@ class SaidaEstoquePage extends StatelessWidget {
                     children: [
                       InfoCard(
                         texto: 'Total em Vendas',
-                        valor: 'R\$ ${totalVenda.toStringAsFixed(2)}',
+                        valor: NumberFormat.simpleCurrency(
+                          locale: 'pt_BR',
+                        ).format(totalVenda),
                         cor: Colors.greenAccent,
                         icon: Icons.shopping_cart,
                       ),
                       const SizedBox(height: 12),
                       InfoCard(
                         texto: 'Perdas',
-                        valor: 'R\$ ${totalPerdas.toStringAsFixed(2)}',
+                        valor: NumberFormat.simpleCurrency(
+                          locale: 'pt_BR',
+                        ).format(totalPerdas),
                         cor: Colors.redAccent,
                         icon: Icons.warning,
                       ),
                       const SizedBox(height: 12),
                       InfoCard(
                         texto: 'Uso Interno',
-                        valor: 'R\$ ${totalUsoInterno.toStringAsFixed(2)}',
+                        valor: NumberFormat.simpleCurrency(
+                          locale: 'pt_BR',
+                        ).format(totalUsoInterno),
                         cor: Colors.blueAccent,
                         icon: Icons.medical_services,
                       ),
