@@ -1,11 +1,14 @@
 import 'package:farmastock/constants/unidades.dart';
-import 'package:farmastock/widgets/components/auto_complete.dart';
+import 'package:farmastock/data/boxes.dart';
+import 'package:farmastock/modelo/produto_modelo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:validators/validators.dart';
 
 class EditarProdutoPage extends StatefulWidget {
-  const EditarProdutoPage({super.key});
+  final Produto? produto;
+
+  const EditarProdutoPage({super.key, this.produto});
 
   @override
   State<EditarProdutoPage> createState() => _EditarProdutoPageState();
@@ -14,10 +17,67 @@ class EditarProdutoPage extends StatefulWidget {
 class _EditarProdutoPageState extends State<EditarProdutoPage> {
   final _formKey = GlobalKey<FormState>();
 
+  late final TextEditingController nomeController = TextEditingController(
+    text: widget.produto?.nome ?? '',
+  );
+
+  late final TextEditingController codBarrasController = TextEditingController(
+    text: widget.produto?.codigoBarras ?? '',
+  );
+
+  late UnidadeMedida unidadeMedida =
+      widget.produto?.unidadeMedida ?? UnidadeMedida.un;
+
+  late final TextEditingController quantidadeAtualController =
+      TextEditingController(
+        text: widget.produto?.quantidadeAtual.toString() ?? '',
+      );
+
+  late final TextEditingController quantidadeMinimaController =
+      TextEditingController(
+        text: widget.produto?.quantidadeMinima.toString() ?? '',
+      );
+
+  late final TextEditingController precoCustoController = TextEditingController(
+    text: widget.produto?.precoCusto.toString() ?? '',
+  );
+
+  late final TextEditingController precoVendaController = TextEditingController(
+    text: widget.produto?.precoVenda.toString() ?? '',
+  );
+
+  void _salvar() {
+    if (_formKey.currentState!.validate()) {
+      final produto = Produto(
+        id: widget.produto?.id,
+        nome: nomeController.text,
+        codigoBarras: codBarrasController.text,
+        unidadeMedida: unidadeMedida,
+        quantidadeAtual: int.parse(quantidadeAtualController.text),
+        quantidadeMinima: int.parse(quantidadeMinimaController.text),
+        precoCusto: double.parse(precoCustoController.text),
+        precoVenda: double.parse(precoVendaController.text),
+      );
+
+      produtoBox.put(produto.id, produto);
+      Navigator.pop(context);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Produto "${produto.nome}" salvo com sucesso!')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Editar "Dipirona 500mg"')),
+      appBar: AppBar(
+        title: Text(
+          widget.produto == null
+              ? 'Adicionar produto'
+              : 'Editar "${widget.produto?.nome}"',
+        ),
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -28,6 +88,7 @@ class _EditarProdutoPageState extends State<EditarProdutoPage> {
               spacing: 16.0,
               children: [
                 TextFormField(
+                  controller: nomeController,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Nome do Produto',
@@ -41,6 +102,7 @@ class _EditarProdutoPageState extends State<EditarProdutoPage> {
                 ),
 
                 TextFormField(
+                  controller: codBarrasController,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Código de Barras',
@@ -70,33 +132,32 @@ class _EditarProdutoPageState extends State<EditarProdutoPage> {
                   },
                 ),
 
-                RawAutocomplete<String>(
-                  optionsBuilder: autoCompleteOptionsBuilder(unidades),
-                  optionsViewBuilder: autoCompleteViewBuilder,
-                  fieldViewBuilder: (
-                    context,
-                    textEditingController,
-                    focusNode,
-                    onFieldSubmitted,
-                  ) {
-                    return TextFormField(
-                      controller: textEditingController,
-                      focusNode: focusNode,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Unidade de Medida',
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Por favor, insira a unidade de medida';
-                        }
-                        return null;
-                      },
-                    );
+                DropdownButtonFormField<UnidadeMedida>(
+                  decoration: InputDecoration(
+                    labelText: 'Unidade de Medida',
+                    border: OutlineInputBorder(),
+                  ),
+                  value: unidadeMedida,
+                  items:
+                      unidades.map((unidade) {
+                        return DropdownMenuItem(
+                          value: unidade,
+                          child: Text(unidade.name),
+                        );
+                      }).toList(),
+                  onChanged: (value) {
+                    setState(() => unidadeMedida = value!);
+                  },
+                  validator: (value) {
+                    if (value == null) {
+                      return 'Selecione uma unidade de medida';
+                    }
+                    return null;
                   },
                 ),
 
                 TextFormField(
+                  controller: quantidadeAtualController,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Quantidade Atual',
@@ -118,6 +179,7 @@ class _EditarProdutoPageState extends State<EditarProdutoPage> {
                 ),
 
                 TextFormField(
+                  controller: quantidadeMinimaController,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Quantidade Mínima',
@@ -139,6 +201,7 @@ class _EditarProdutoPageState extends State<EditarProdutoPage> {
                 ),
 
                 TextFormField(
+                  controller: precoCustoController,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Preço de Custo',
@@ -157,6 +220,7 @@ class _EditarProdutoPageState extends State<EditarProdutoPage> {
                 ),
 
                 TextFormField(
+                  controller: precoVendaController,
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Preço de Venda',
@@ -181,9 +245,7 @@ class _EditarProdutoPageState extends State<EditarProdutoPage> {
                       backgroundColor: Theme.of(context).colorScheme.primary,
                       foregroundColor: Theme.of(context).colorScheme.onPrimary,
                     ),
-                    onPressed: () {
-                      if (_formKey.currentState?.validate() ?? false) {}
-                    },
+                    onPressed: _salvar,
                     child: const Text('Salvar'),
                   ),
                 ),
