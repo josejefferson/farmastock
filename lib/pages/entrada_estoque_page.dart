@@ -3,6 +3,7 @@ import 'package:farmastock/pages/entrada_medicamento_page.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:collection/collection.dart';
+import 'package:intl/intl.dart';
 
 class EntradaEstoquePage extends StatefulWidget {
   const EntradaEstoquePage({super.key});
@@ -56,12 +57,15 @@ class _EntradaEstoquePageState extends State<EntradaEstoquePage> {
               return const Text("Não há produtos cadastrados");
             }
 
+            final dataFormatada = DateFormat(
+              'dd/MM/yyyy',
+            ).format(DateTime.parse(entrada.dataEntrada));
             return ListTile(
               title: Text(produto.nome),
               subtitle: Text(
                 "${entrada.quantidade} - ${produto.unidadeMedida.name}",
               ),
-              trailing: Text(entrada.dataEntrada),
+              trailing: Text(dataFormatada),
             );
           },
         ),
