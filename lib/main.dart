@@ -1,4 +1,5 @@
-import 'dart:io';
+import 'dart:io' show Platform;
+
 import 'package:farmastock/data/boxes.dart';
 import 'package:farmastock/modelo/dados_farmacia.dart';
 import 'package:farmastock/modelo/entrada_estoque_modelo.dart';
@@ -7,6 +8,7 @@ import 'package:farmastock/modelo/saidas_estoque_modelo.dart';
 import 'package:farmastock/modelo/usuario_modelo.dart';
 import 'package:farmastock/pages/dashboard_page.dart';
 import 'package:farmastock/pages/login_page.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
@@ -14,7 +16,7 @@ import 'package:path_provider/path_provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  if (Platform.isWindows) {
+  if (!kIsWeb && Platform.isWindows) {
     final dir = await getApplicationSupportDirectory();
     await Hive.initFlutter(dir.path);
   } else {
