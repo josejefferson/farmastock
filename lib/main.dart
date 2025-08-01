@@ -1,4 +1,5 @@
 import 'package:farmastock/data/boxes.dart';
+import 'package:farmastock/data/seed.dart';
 import 'package:farmastock/modelo/dados_farmacia.dart';
 import 'package:farmastock/modelo/entrada_estoque_modelo.dart';
 import 'package:farmastock/modelo/produto_modelo.dart';
@@ -20,6 +21,7 @@ void main() async {
   Hive.registerAdapter(ProdutoAdapter());
   Hive.registerAdapter(UnidadeMedidaAdapter());
   Hive.registerAdapter(SaidaEstoqueAdapter());
+  Hive.registerAdapter(TipoSaidaEstoqueAdapter());
 
   usuariosBox = await Hive.openBox<UsuarioModelo>('usuariosBox');
   dadosFarmaciaBox = await Hive.openBox<DadosFarmacia>('dadosFarmaciaBox');
@@ -27,6 +29,10 @@ void main() async {
   produtoBox = await Hive.openBox<Produto>('produtoBox');
   saidasEstoqueBox = await Hive.openBox<SaidaEstoque>('saidasEstoqueBox');
   usuarioLogadoBox = await Hive.openBox<UsuarioModelo>('usuarioLogadoBox');
+
+  // await seedInicial();
+  // final directory = await getApplicationDocumentsDirectory();
+  // Hive.defaultDirectory = directory.path;
 
   if (usuariosBox.isEmpty) {
     usuarioLogadoBox.put(
