@@ -1,6 +1,7 @@
 import 'package:farmastock/constants/unidades.dart';
 import 'package:farmastock/data/boxes.dart';
 import 'package:farmastock/modelo/produto_modelo.dart';
+import 'package:farmastock/widgets/components/auto_complete.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:validators/validators.dart';
@@ -20,6 +21,8 @@ class _EditarProdutoPageState extends State<EditarProdutoPage> {
   late final TextEditingController nomeController = TextEditingController(
     text: widget.produto?.nome ?? '',
   );
+
+  final nomeFocusNode = FocusNode();
 
   late final TextEditingController codBarrasController = TextEditingController(
     text: widget.produto?.codigoBarras ?? '',
@@ -87,17 +90,33 @@ class _EditarProdutoPageState extends State<EditarProdutoPage> {
             child: Column(
               spacing: 16.0,
               children: [
-                TextFormField(
-                  controller: nomeController,
-                  decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Nome do Produto',
+                RawAutocomplete<String>(
+                  optionsBuilder: autoCompleteOptionsBuilder(
+                    produtosAPIBox.get('produtos') ?? [],
                   ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Por favor, insira o nome do produto';
-                    }
-                    return null;
+                  focusNode: nomeFocusNode,
+                  optionsViewBuilder: autoCompleteViewBuilder,
+                  textEditingController: nomeController,
+                  fieldViewBuilder: (
+                    context,
+                    textEditingController,
+                    focusNode,
+                    onFieldSubmitted,
+                  ) {
+                    return TextFormField(
+                      controller: textEditingController,
+                      focusNode: focusNode,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Nome do Produto',
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Por favor, insira o nome do produto';
+                        }
+                        return null;
+                      },
+                    );
                   },
                 ),
 

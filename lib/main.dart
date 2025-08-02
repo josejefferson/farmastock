@@ -8,6 +8,7 @@ import 'package:farmastock/modelo/saidas_estoque_modelo.dart';
 import 'package:farmastock/modelo/usuario_modelo.dart';
 import 'package:farmastock/pages/dashboard_page.dart';
 import 'package:farmastock/pages/login_page.dart';
+import 'package:farmastock/services/medicamentos_api.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -38,6 +39,9 @@ void main() async {
   produtoBox = await Hive.openBox<Produto>('produtoBox');
   saidasEstoqueBox = await Hive.openBox<SaidaEstoque>('saidasEstoqueBox');
   usuarioLogadoBox = await Hive.openBox<UsuarioModelo>('usuarioLogadoBox');
+  produtosAPIBox = await Hive.openBox<dynamic>('produtosAPIBox');
+
+  atualizarRepositorioMedicamentos();
 
   if (usuariosBox.isEmpty) {
     usuarioLogadoBox.put(

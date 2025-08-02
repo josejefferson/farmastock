@@ -12,3 +12,4 @@ late Box<Produto> produtoBox;
 late Box<SaidaEstoque> saidasEstoqueBox;
 
 late Box<UsuarioModelo> usuarioLogadoBox;
+late Box<dynamic> produtosAPIBox;
